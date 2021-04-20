@@ -1,0 +1,219 @@
+# Modeling: SPR Modifier-Noun Collocations
+
+## Setup
+```julia results = "hidden"
+using MixedModels
+using CSV, DataFrames, DataFramesMeta
+using RCall, JellyMe4 
+using Random
+
+R"""
+library(lme4)
+library(tidyverse)
+library(effects)
+library(lattice)
+library(car)
+library(corrplot)
+library(ggeffects)
+library(LMERConvenienceFunctions)
+""";
+```
+
+## Stimuli & Theoretical background
+Background:
+- previous experiment suggested that backwards TP predicts reading times to modifier-noun bigrams
+- this effect developed over the spillover region (noun and two following words), with strongest effect on the word directly following the bigram (spillover 1)
+- collinearity issues in previous experiment; found that a good part of the effect was attributable to first / single word frequencies and bigram frequency
+
+Stimuli sets (SPR):
+A: absolute control
+B: absolute silence 
+(A & B are automatically extracted for the same first word and a maximally similar log bigram frequency)
+
+C: total control
+D: total silence
+(C & D were constructed from a synonymous W1)
+
+A & B control for iosyncratic features of W1 (not just word frequency,  but also idiosyncratic features of that word in isolation, such as imageability, orthographic neighbors, etc.) They are matched on bigram frequency so that we can disentangle the effect of the entire chunk freq vs. the effect of its individual component words and their association to each other.
+
+C & D control for idiosyncratic features of word 2, but are not matched on bigram frequency. 
+
+## Model
+Hypothesis: Backwards transition probability (BTP_lz) and/or forward transition probability (FTP_lz) will predict log-transformed RTs over the spillover region (noun, spillover_1, spillover_2)
+Further: BTP and FTP will interact with age (age_z), reading experience (reading_exp_z), and position -- potentially all four will enter into an interaction
+
+Predictors of interest:
+- BTP_lz: log-transformed backward transition probability of words in bigram (z-scored)
+- FTP_lz: log-transformed forward transition probability of words in bigram (z-scored)
+- bigram_freq_lz: log-transformed bigram frequency (z-scored)
+- age_z: age in years (z-scored)
+- reading_exp_z: added score from Words that Go Together task, Author Recognition task and synonym-based vocabulary task, then z-scored
+
+Other covariates:
+- length_z: length of current word (z-scored)
+- prev_length_z: length of previous word (z-scored)
+- trial_number_z: trial number (z-scored)
+- education: level of education (4 levels from  high school to graduate degree)
+
+
+## Load data
+- Preprocessed in R (file: spr_preparer.Rmd):
+    - Added trial number
+    - Added item IDs and corpus-derived stats 
+    - Log-transformed RTs and word frequencies using log()
+    - Centered and scaled numeric predictors using scale() -> new variables end in _z or _lz (log/z-score transformed)
+    - Removed RTs < 100ms and outside of 2.5SD of each participant's mean
+    - Extracted reading times to the critical region only (noun, spillover_1 and spillover_2)
+
+
+```julia 
+spr_critregion = DataFrame(CSV.read(joinpath(@__DIR__,"data/critregion_exp.txt"), delim="\t", header = 1));
+```
+
+## Correlation between predictors
+
+```julia
+@rput spr_critregion
+
+R"""
+spr_critregion %>% 
+  select(bigram_freq_lz, freq_lz, prev_freq_lz, BTP_lz, FTP_lz, length_z, prev_length_z) %>% 
+  cor(method="spearman") %>% 
+  corrplot(method="number", type="lower")
+"""
+
+R"""
+spr_critregion %>% 
+  distinct(id, .keep_all=TRUE) %>% 
+  select(vocab_z, wgt_z, art_z, reading_exp_z, age_z) %>% 
+  drop_na() %>% 
+  cor(method = "pearson") %>% 
+  corrplot(method="number", type="lower")
+"""
+```
+
+Correlation between predictors is only moderate. In any case, correlation should cause standard errors to go up (and t-values to go down), resulting in a loss of power, but it shouldn't affect coefficients. 
+
+However, the inclusion of current word frequencies has a different meaning based on position -- in the critical position (the noun), current and previous word frequencies are vital parts of the calculation of forward and backward TP. In the spillover region, on the other hand, this is greatly reduced (previous word freq. of spillover_1 is part of back TP, but all others are not used in TP calculations). For this reason, we use word length to proxy word frequency.
+
+Correlation between experience-based measures (and age) stronger, as would be expected. Thus we create an overall measure of reading experience taken by adding the z-scores of the three reading assessments. 
+
+
+### Set contrasts
+```julia results = "hidden"
+cntrsts = merge(
+    Dict(:position => EffectsCoding(base="spillover_2"),
+         :education => HelmertCoding(levels=["High school", "Trade school", "Undergraduate", "Grad school"]),
+         :id => Grouping(),
+         :w1 => Grouping(),
+         :w2 => Grouping())
+);
+```
+
+## Maximal model critical word
+Partially-crossed random effects on W1 and W2 to distinguish between the different types of control in item design. This should also take care of any differences between pairings, like differences in average bigram frequency, but also control for variability in the quality of synonymy and the lexical characteristics of each word. 
+
+Step 1 - Initial maximal models:
+```julia results = "hidden"
+formula_maximal_ftp = @formula (logRT  ~ 1 + FTP_lz * reading_exp_z * age_z * position + trial_number_z + word_number_z + length_z + prev_length_z + education +
+               (1 + FTP_lz + trial_number_z + word_number_z + length_z + prev_length_z | id) + 
+               (1 + trial_number_z + reading_exp_z * age_z | w1) +
+               (1 + trial_number_z + reading_exp_z * age_z | w2));
+
+formula_maximal_btp = @formula (logRT  ~ 1 + BTP_lz * reading_exp_z * age_z * position + trial_number_z + word_number_z + length_z + prev_length_z +  education + 
+               (1 + BTP_lz + trial_number_z + word_number_z + length_z + prev_length_z | id) + 
+               (1 + trial_number_z + reading_exp_z * age_z | w1) +
+               (1 + trial_number_z + reading_exp_z * age_z | w2));
+
+#maximal_ftp = fit(MixedModel, formula_maximal_ftp, spr_critregion, contrasts = cntrsts);
+#maximal_ftp.rePCA
+#VarCorr(maximal_ftp)
+
+#maximal_btp = fit(MixedModel, formula_maximal_btp, spr_critregion, contrasts = cntrsts);
+#maximal_btp.rePCA
+#VarCorr(maximal_btp)
+```
+
+To avoid introducing differences between W1/W2 random effects and between age/reading_exp, age * reading_exp slope was removed on both the words and the effects on their own as well. These terms were already not very informative and keeping one of the two as a random slope or keeping them on one word but not the other would have introduced an imbalance in the model structure.
+Also removed the TPs from id to allow for the same random effects structure as they were already not very informative, and word_number was also not very informative.
+
+Step 2 - Reduced random effect structure:
+```julia results = "hidden"
+formula_btp1 = @formula (logRT  ~ 1 + BTP_lz * reading_exp_z * age_z * position + trial_number_z + word_number_z + length_z + prev_length_z + education +
+               (1 + trial_number_z + length_z + prev_length_z | id) + 
+               (1 + trial_number_z | w1) +
+               (1 + trial_number_z | w2));
+
+formula_ftp1 = @formula (logRT  ~ 1 + FTP_lz * reading_exp_z * age_z * position + trial_number_z + word_number_z + length_z + prev_length_z + education + 
+               (1 + trial_number_z + length_z + prev_length_z | id) + 
+               (1 + trial_number_z | w1) +
+               (1 + trial_number_z | w2));
+
+#region_ftp = fit(MixedModel, formula_ftp1, spr_critregion, contrasts=cntrsts);
+#region_btp = fit(MixedModel, formula_btp1, spr_critregion, contrasts=cntrsts);
+```
+
+## Final model
+Step 3 - Remove the non-significant three/four-way interactions for final model:
+```julia
+formula_btp2 = @formula (logRT  ~ 1 + BTP_lz * (reading_exp_z + age_z + position) + position * (age_z + reading_exp_z) + trial_number_z + word_number_z + length_z + prev_length_z + education + 
+               (1 + trial_number_z + length_z + prev_length_z | id) + 
+               (1 + trial_number_z | w1) +
+               (1 + trial_number_z | w2));
+
+formula_ftp2 = @formula (logRT  ~ 1 + FTP_lz * (reading_exp_z + age_z + position) + position * (age_z + reading_exp_z) + trial_number_z + word_number_z + length_z + prev_length_z + education + 
+               (1 + trial_number_z + length_z + prev_length_z | id) + 
+               (1 + trial_number_z | w1) +
+               (1 + trial_number_z | w2));
+
+region_ftp = fit(MixedModel, formula_ftp2, spr_critregion, contrasts=cntrsts);
+region_btp = fit(MixedModel, formula_btp2, spr_critregion, contrasts=cntrsts);
+
+show(region_ftp)
+show(region_btp)
+```
+
+## Plot interactions using R
+```julia
+region_ftp = (region_ftp, spr_critregion); #tuple that wraps the fitted model and the dataframe
+@rput region_ftp;
+
+region_btp = (region_btp, spr_critregion); #tuple that wraps the fitted model and the dataframe
+@rput region_btp;
+
+R"""
+plot(ggpredict(region_ftp, terms = c("FTP_lz", "position")), facet = T, colors = "viridis")
+"""
+
+R"""
+plot(ggpredict(region_ftp, terms = c("FTP_lz", "age_z [quart]")), colors = "viridis")
+"""
+
+R"""
+plot(ggpredict(region_ftp, terms = c("FTP_lz", "reading_exp_z [quart]")), colors = "viridis")
+"""
+
+R"""
+plot(ggpredict(region_btp, terms = c("BTP_lz", "position")), facet = T, colors = "viridis")
+"""
+
+R"""
+plot(ggpredict(region_btp, terms = c("BTP_lz", "age_z [quart]")), colors = "viridis")
+"""
+
+R"""
+plot(ggpredict(region_btp, terms = c("BTP_lz", "reading_exp_z [quart]")), colors = "viridis")
+"""
+```
+
+## Model diagnostics
+```julia
+R"""
+library(performance)
+check_model(region_btp)
+"""
+
+R"""
+check_model(region_ftp)
+"""
+```

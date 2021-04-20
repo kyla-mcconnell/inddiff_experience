@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<HTML lang = "en">
+<HEAD>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  
+  
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: { equationNumbers: { autoNumber: "AMS" } }
+    });
+  </script>
+
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+
+  
+<style>
+pre.hljl {
+    border: 1px solid #ccc;
+    margin: 5px;
+    padding: 5px;
+    overflow-x: auto;
+    color: rgb(68,68,68); background-color: rgb(251,251,251); }
+pre.hljl > span.hljl-t { }
+pre.hljl > span.hljl-w { }
+pre.hljl > span.hljl-e { }
+pre.hljl > span.hljl-eB { }
+pre.hljl > span.hljl-o { }
+pre.hljl > span.hljl-k { color: rgb(148,91,176); font-weight: bold; }
+pre.hljl > span.hljl-kc { color: rgb(59,151,46); font-style: italic; }
+pre.hljl > span.hljl-kd { color: rgb(214,102,97); font-style: italic; }
+pre.hljl > span.hljl-kn { color: rgb(148,91,176); font-weight: bold; }
+pre.hljl > span.hljl-kp { color: rgb(148,91,176); font-weight: bold; }
+pre.hljl > span.hljl-kr { color: rgb(148,91,176); font-weight: bold; }
+pre.hljl > span.hljl-kt { color: rgb(148,91,176); font-weight: bold; }
+pre.hljl > span.hljl-n { }
+pre.hljl > span.hljl-na { }
+pre.hljl > span.hljl-nb { }
+pre.hljl > span.hljl-nbp { }
+pre.hljl > span.hljl-nc { }
+pre.hljl > span.hljl-ncB { }
+pre.hljl > span.hljl-nd { color: rgb(214,102,97); }
+pre.hljl > span.hljl-ne { }
+pre.hljl > span.hljl-neB { }
+pre.hljl > span.hljl-nf { color: rgb(66,102,213); }
+pre.hljl > span.hljl-nfm { color: rgb(66,102,213); }
+pre.hljl > span.hljl-np { }
+pre.hljl > span.hljl-nl { }
+pre.hljl > span.hljl-nn { }
+pre.hljl > span.hljl-no { }
+pre.hljl > span.hljl-nt { }
+pre.hljl > span.hljl-nv { }
+pre.hljl > span.hljl-nvc { }
+pre.hljl > span.hljl-nvg { }
+pre.hljl > span.hljl-nvi { }
+pre.hljl > span.hljl-nvm { }
+pre.hljl > span.hljl-l { }
+pre.hljl > span.hljl-ld { color: rgb(148,91,176); font-style: italic; }
+pre.hljl > span.hljl-s { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sa { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sb { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sc { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sd { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sdB { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sdC { color: rgb(201,61,57); }
+pre.hljl > span.hljl-se { color: rgb(59,151,46); }
+pre.hljl > span.hljl-sh { color: rgb(201,61,57); }
+pre.hljl > span.hljl-si { }
+pre.hljl > span.hljl-so { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sr { color: rgb(201,61,57); }
+pre.hljl > span.hljl-ss { color: rgb(201,61,57); }
+pre.hljl > span.hljl-ssB { color: rgb(201,61,57); }
+pre.hljl > span.hljl-nB { color: rgb(59,151,46); }
+pre.hljl > span.hljl-nbB { color: rgb(59,151,46); }
+pre.hljl > span.hljl-nfB { color: rgb(59,151,46); }
+pre.hljl > span.hljl-nh { color: rgb(59,151,46); }
+pre.hljl > span.hljl-ni { color: rgb(59,151,46); }
+pre.hljl > span.hljl-nil { color: rgb(59,151,46); }
+pre.hljl > span.hljl-noB { color: rgb(59,151,46); }
+pre.hljl > span.hljl-oB { color: rgb(102,102,102); font-weight: bold; }
+pre.hljl > span.hljl-ow { color: rgb(102,102,102); font-weight: bold; }
+pre.hljl > span.hljl-p { }
+pre.hljl > span.hljl-c { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-ch { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-cm { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-cp { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-cpB { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-cs { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-csB { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-g { }
+pre.hljl > span.hljl-gd { }
+pre.hljl > span.hljl-ge { }
+pre.hljl > span.hljl-geB { }
+pre.hljl > span.hljl-gh { }
+pre.hljl > span.hljl-gi { }
+pre.hljl > span.hljl-go { }
+pre.hljl > span.hljl-gp { }
+pre.hljl > span.hljl-gs { }
+pre.hljl > span.hljl-gsB { }
+pre.hljl > span.hljl-gt { }
+</style>
+
+
+
+  <style type="text/css">
+  @font-face {
+  font-style: normal;
+  font-weight: 300;
+}
+@font-face {
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-style: normal;
+  font-weight: 600;
+}
+html {
+  font-family: sans-serif; /* 1 */
+  -ms-text-size-adjust: 100%; /* 2 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+body {
+  margin: 0;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+audio,
+canvas,
+progress,
+video {
+  display: inline-block; /* 1 */
+  vertical-align: baseline; /* 2 */
+}
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+[hidden],
+template {
+  display: none;
+}
+a:active,
+a:hover {
+  outline: 0;
+}
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+b,
+strong {
+  font-weight: bold;
+}
+dfn {
+  font-style: italic;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+mark {
+  background: #ff0;
+  color: #000;
+}
+small {
+  font-size: 80%;
+}
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+img {
+  border: 0;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+figure {
+  margin: 1em 40px;
+}
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+pre {
+  overflow: auto;
+}
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit; /* 1 */
+  font: inherit; /* 2 */
+  margin: 0; /* 3 */
+}
+button {
+  overflow: visible;
+}
+button,
+select {
+  text-transform: none;
+}
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button; /* 2 */
+  cursor: pointer; /* 3 */
+}
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+input {
+  line-height: normal;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+input[type="search"] {
+  -webkit-appearance: textfield; /* 1 */
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box; /* 2 */
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+legend {
+  border: 0; /* 1 */
+  padding: 0; /* 2 */
+}
+textarea {
+  overflow: auto;
+}
+optgroup {
+  font-weight: bold;
+}
+table {
+  font-family: monospace, monospace;
+  font-size : 0.8em;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td,
+th {
+  padding: 0;
+}
+thead th {
+    border-bottom: 1px solid black;
+    background-color: white;
+}
+tr:nth-child(odd){
+  background-color: rgb(248,248,248);
+}
+
+
+/*
+* Skeleton V2.0.4
+* Copyright 2014, Dave Gamache
+* www.getskeleton.com
+* Free to use under the MIT license.
+* http://www.opensource.org/licenses/mit-license.php
+* 12/29/2014
+*/
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box; }
+.column,
+.columns {
+  width: 100%;
+  float: left;
+  box-sizing: border-box; }
+@media (min-width: 400px) {
+  .container {
+    width: 85%;
+    padding: 0; }
+}
+@media (min-width: 550px) {
+  .container {
+    width: 80%; }
+  .column,
+  .columns {
+    margin-left: 4%; }
+  .column:first-child,
+  .columns:first-child {
+    margin-left: 0; }
+
+  .one.column,
+  .one.columns                    { width: 4.66666666667%; }
+  .two.columns                    { width: 13.3333333333%; }
+  .three.columns                  { width: 22%;            }
+  .four.columns                   { width: 30.6666666667%; }
+  .five.columns                   { width: 39.3333333333%; }
+  .six.columns                    { width: 48%;            }
+  .seven.columns                  { width: 56.6666666667%; }
+  .eight.columns                  { width: 65.3333333333%; }
+  .nine.columns                   { width: 74.0%;          }
+  .ten.columns                    { width: 82.6666666667%; }
+  .eleven.columns                 { width: 91.3333333333%; }
+  .twelve.columns                 { width: 100%; margin-left: 0; }
+
+  .one-third.column               { width: 30.6666666667%; }
+  .two-thirds.column              { width: 65.3333333333%; }
+
+  .one-half.column                { width: 48%; }
+
+  /* Offsets */
+  .offset-by-one.column,
+  .offset-by-one.columns          { margin-left: 8.66666666667%; }
+  .offset-by-two.column,
+  .offset-by-two.columns          { margin-left: 17.3333333333%; }
+  .offset-by-three.column,
+  .offset-by-three.columns        { margin-left: 26%;            }
+  .offset-by-four.column,
+  .offset-by-four.columns         { margin-left: 34.6666666667%; }
+  .offset-by-five.column,
+  .offset-by-five.columns         { margin-left: 43.3333333333%; }
+  .offset-by-six.column,
+  .offset-by-six.columns          { margin-left: 52%;            }
+  .offset-by-seven.column,
+  .offset-by-seven.columns        { margin-left: 60.6666666667%; }
+  .offset-by-eight.column,
+  .offset-by-eight.columns        { margin-left: 69.3333333333%; }
+  .offset-by-nine.column,
+  .offset-by-nine.columns         { margin-left: 78.0%;          }
+  .offset-by-ten.column,
+  .offset-by-ten.columns          { margin-left: 86.6666666667%; }
+  .offset-by-eleven.column,
+  .offset-by-eleven.columns       { margin-left: 95.3333333333%; }
+
+  .offset-by-one-third.column,
+  .offset-by-one-third.columns    { margin-left: 34.6666666667%; }
+  .offset-by-two-thirds.column,
+  .offset-by-two-thirds.columns   { margin-left: 69.3333333333%; }
+
+  .offset-by-one-half.column,
+  .offset-by-one-half.columns     { margin-left: 52%; }
+
+}
+html {
+  font-size: 62.5%; }
+body {
+  font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
+  line-height: 1.6;
+  font-weight: 400;
+  font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #222; }
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  font-weight: 300; }
+h1 { font-size: 3.6rem; line-height: 1.2;  letter-spacing: -.1rem;}
+h2 { font-size: 3.4rem; line-height: 1.25; letter-spacing: -.1rem; }
+h3 { font-size: 3.2rem; line-height: 1.3;  letter-spacing: -.1rem; }
+h4 { font-size: 2.8rem; line-height: 1.35; letter-spacing: -.08rem; }
+h5 { font-size: 2.4rem; line-height: 1.5;  letter-spacing: -.05rem; }
+h6 { font-size: 1.5rem; line-height: 1.6;  letter-spacing: 0; }
+
+p {
+  margin-top: 0; }
+a {
+  color: #1EAEDB; }
+a:hover {
+  color: #0FA0CE; }
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  color: #555;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  cursor: pointer;
+  box-sizing: border-box; }
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+.button:focus,
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="button"]:focus {
+  color: #333;
+  border-color: #888;
+  outline: 0; }
+.button.button-primary,
+button.button-primary,
+input[type="submit"].button-primary,
+input[type="reset"].button-primary,
+input[type="button"].button-primary {
+  color: #FFF;
+  background-color: #33C3F0;
+  border-color: #33C3F0; }
+.button.button-primary:hover,
+button.button-primary:hover,
+input[type="submit"].button-primary:hover,
+input[type="reset"].button-primary:hover,
+input[type="button"].button-primary:hover,
+.button.button-primary:focus,
+button.button-primary:focus,
+input[type="submit"].button-primary:focus,
+input[type="reset"].button-primary:focus,
+input[type="button"].button-primary:focus {
+  color: #FFF;
+  background-color: #1EAEDB;
+  border-color: #1EAEDB; }
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
+  height: 38px;
+  padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
+  background-color: #fff;
+  border: 1px solid #D1D1D1;
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box; }
+/* Removes awkward default styles on some inputs for iOS */
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none; }
+textarea {
+  min-height: 65px;
+  padding-top: 6px;
+  padding-bottom: 6px; }
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+  border: 1px solid #33C3F0;
+  outline: 0; }
+label,
+legend {
+  display: block;
+  margin-bottom: .5rem;
+  font-weight: 600; }
+fieldset {
+  padding: 0;
+  border-width: 0; }
+input[type="checkbox"],
+input[type="radio"] {
+  display: inline; }
+label > .label-body {
+  display: inline-block;
+  margin-left: .5rem;
+  font-weight: normal; }
+ul {
+  list-style: circle; }
+ol {
+  list-style: decimal; }
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+  margin: 1.5rem 0 1.5rem 3rem;
+  font-size: 90%; }
+li > p {margin : 0;}
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #E1E1E1; }
+th:first-child,
+td:first-child {
+  padding-left: 0; }
+th:last-child,
+td:last-child {
+  padding-right: 0; }
+button,
+.button {
+  margin-bottom: 1rem; }
+input,
+textarea,
+select,
+fieldset {
+  margin-bottom: 1.5rem; }
+pre,
+blockquote,
+dl,
+figure,
+table,
+p,
+ul,
+ol,
+form {
+  margin-bottom: 1.0rem; }
+.u-full-width {
+  width: 100%;
+  box-sizing: border-box; }
+.u-max-full-width {
+  max-width: 100%;
+  box-sizing: border-box; }
+.u-pull-right {
+  float: right; }
+.u-pull-left {
+  float: left; }
+hr {
+  margin-top: 3rem;
+  margin-bottom: 3.5rem;
+  border-width: 0;
+  border-top: 1px solid #E1E1E1; }
+.container:after,
+.row:after,
+.u-cf {
+  content: "";
+  display: table;
+  clear: both; }
+
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  word-break: break-all;
+  word-wrap: break-word;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre.hljl {
+  margin: 0 0 10px;
+  display: block;
+  background: #f5f5f5;
+  border-radius: 4px;
+  padding : 5px;
+}
+
+pre.output {
+  background: #ffffff;
+}
+
+pre.code {
+  background: #ffffff;
+}
+
+pre.julia-error {
+  color : red
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 0.9em;
+}
+
+
+@media (min-width: 400px) {}
+@media (min-width: 550px) {}
+@media (min-width: 750px) {}
+@media (min-width: 1000px) {}
+@media (min-width: 1200px) {}
+
+h1.title {margin-top : 20px}
+img {max-width : 100%}
+div.title {text-align: center;}
+
+  </style>
+</HEAD>
+
+<BODY>
+  <div class ="container">
+    <div class = "row">
+      <div class = "col-md-12 twelve columns">
+        <div class="title">
+          
+          
+          
+        </div>
+
+        <h1>Modeling: SPR Modifier-Noun Collocations</h1>
+<h2>Setup</h2>
+
+
+<pre class='hljl'>
+<span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>MixedModels</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>CSV</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>DataFrames</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>DataFramesMeta</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>RCall</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>JellyMe4</span><span class='hljl-t'> 
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>Random</span><span class='hljl-t'>
+
+</span><span class='hljl-so'>R&quot;&quot;&quot;
+library(lme4)
+library(tidyverse)
+library(effects)
+library(lattice)
+library(car)
+library(corrplot)
+library(ggeffects)
+library(LMERConvenienceFunctions)
+&quot;&quot;&quot;</span><span class='hljl-p'>;</span>
+</pre>
+
+
+
+<h2>Stimuli &amp; Theoretical background</h2>
+<p>Background:</p>
+<ul>
+<li><p>previous experiment suggested that backwards TP predicts reading times to modifier-noun bigrams</p>
+</li>
+<li><p>this effect developed over the spillover region &#40;noun and two following words&#41;, with strongest effect on the word directly following the bigram &#40;spillover 1&#41;</p>
+</li>
+<li><p>collinearity issues in previous experiment; found that a good part of the effect was attributable to first / single word frequencies and bigram frequency</p>
+</li>
+</ul>
+<p>Stimuli sets &#40;SPR&#41;: A: absolute control B: absolute silence  &#40;A &amp; B are automatically extracted for the same first word and a maximally similar log bigram frequency&#41;</p>
+<p>C: total control D: total silence &#40;C &amp; D were constructed from a synonymous W1&#41;</p>
+<p>A &amp; B control for iosyncratic features of W1 &#40;not just word frequency,  but also idiosyncratic features of that word in isolation, such as imageability, orthographic neighbors, etc.&#41; They are matched on bigram frequency so that we can disentangle the effect of the entire chunk freq vs. the effect of its individual component words and their association to each other.</p>
+<p>C &amp; D control for idiosyncratic features of word 2, but are not matched on bigram frequency. </p>
+<h2>Model</h2>
+<p>Hypothesis: Backwards transition probability &#40;BTP<em>lz&#41; and/or forward transition probability &#40;FTP</em>lz&#41; will predict log-transformed RTs over the spillover region &#40;noun, spillover<em>1, spillover</em>2&#41; Further: BTP and FTP will interact with age &#40;age<em>z&#41;, reading experience &#40;reading</em>exp_z&#41;, and position – potentially all four will enter into an interaction</p>
+<p>Predictors of interest:</p>
+<ul>
+<li><p>BTP_lz: log-transformed backward transition probability of words in bigram &#40;z-scored&#41;</p>
+</li>
+<li><p>FTP_lz: log-transformed forward transition probability of words in bigram &#40;z-scored&#41;</p>
+</li>
+<li><p>bigram<em>freq</em>lz: log-transformed bigram frequency &#40;z-scored&#41;</p>
+</li>
+<li><p>age_z: age in years &#40;z-scored&#41;</p>
+</li>
+<li><p>reading<em>exp</em>z: added score from Words that Go Together task, Author Recognition task and synonym-based vocabulary task, then z-scored</p>
+</li>
+</ul>
+<p>Other covariates:</p>
+<ul>
+<li><p>length_z: length of current word &#40;z-scored&#41;</p>
+</li>
+<li><p>prev<em>length</em>z: length of previous word &#40;z-scored&#41;</p>
+</li>
+<li><p>trial<em>number</em>z: trial number &#40;z-scored&#41;</p>
+</li>
+<li><p>education: level of education &#40;4 levels from  high school to graduate degree&#41;</p>
+</li>
+</ul>
+<h2>Load data</h2>
+<ul>
+<li><p>Preprocessed in R &#40;file: spr_preparer.Rmd&#41;:</p>
+<ul>
+<li><p>Added trial number</p>
+</li>
+<li><p>Added item IDs and corpus-derived stats </p>
+</li>
+<li><p>Log-transformed RTs and word frequencies using log&#40;&#41;</p>
+</li>
+<li><p>Centered and scaled numeric predictors using scale&#40;&#41; -&gt; new variables end in _z or _lz &#40;log/z-score transformed&#41;</p>
+</li>
+<li><p>Removed RTs &lt; 100ms and outside of 2.5SD of each participant&#39;s mean</p>
+</li>
+<li><p>Extracted reading times to the critical region only &#40;noun, spillover<em>1 and spillover</em>2&#41;</p>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>spr_critregion</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>DataFrame</span><span class='hljl-p'>(</span><span class='hljl-n'>CSV</span><span class='hljl-oB'>.</span><span class='hljl-nf'>read</span><span class='hljl-p'>(</span><span class='hljl-nf'>joinpath</span><span class='hljl-p'>(</span><span class='hljl-nd'>@__DIR__</span><span class='hljl-p'>,</span><span class='hljl-s'>&quot;data/critregion_exp.txt&quot;</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>delim</span><span class='hljl-oB'>=</span><span class='hljl-s'>&quot;</span><span class='hljl-se'>\t</span><span class='hljl-s'>&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>header</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-p'>));</span>
+</pre>
+
+
+
+<table class="data-frame"><thead><tr><th></th><th>id</th><th>type</th><th>group</th><th>word_in_sentence</th><th>item</th><th>RT</th></tr><tr><th></th><th>String</th><th>String</th><th>String</th><th>Int64</th><th>String</th><th>Int64</th></tr></thead><tbody><p>73,651 rows × 62 columns (omitted printing of 56 columns)</p><tr><th>1</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>6</td><td>applicants</td><td>297</td></tr><tr><th>2</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>from</td><td>471</td></tr><tr><th>3</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>the</td><td>284</td></tr><tr><th>4</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>pressures</td><td>322</td></tr><tr><th>5</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>on</td><td>317</td></tr><tr><th>6</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>9</td><td>the</td><td>417</td></tr><tr><th>7</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>6</td><td>explanations</td><td>448</td></tr><tr><th>8</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>that</td><td>439</td></tr><tr><th>9</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>were</td><td>379</td></tr><tr><th>10</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>6</td><td>bench</td><td>379</td></tr><tr><th>11</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>was</td><td>461</td></tr><tr><th>12</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>all</td><td>366</td></tr><tr><th>13</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>6</td><td>in</td><td>387</td></tr><tr><th>14</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>her</td><td>319</td></tr><tr><th>15</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>6</td><td>horizon</td><td>246</td></tr><tr><th>16</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>was</td><td>481</td></tr><tr><th>17</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>hanging</td><td>242</td></tr><tr><th>18</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>connection</td><td>463</td></tr><tr><th>19</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>was</td><td>266</td></tr><tr><th>20</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>9</td><td>supposed</td><td>276</td></tr><tr><th>21</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>6</td><td>management</td><td>372</td></tr><tr><th>22</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>to</td><td>316</td></tr><tr><th>23</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>make</td><td>342</td></tr><tr><th>24</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>5</td><td>genius</td><td>453</td></tr><tr><th>&vellip;</th><td>&vellip;</td><td>&vellip;</td><td>&vellip;</td><td>&vellip;</td><td>&vellip;</td><td>&vellip;</td></tr></tbody></table>
+
+<h2>Correlation between predictors</h2>
+
+
+<pre class='hljl'>
+<span class='hljl-nd'>@rput</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-t'>
+
+</span><span class='hljl-so'>R&quot;&quot;&quot;
+spr_critregion %&gt;% 
+  select(bigram_freq_lz, freq_lz, prev_freq_lz, BTP_lz, FTP_lz, length_z, prev_length_z) %&gt;% 
+  cor(method=&quot;spearman&quot;) %&gt;% 
+  corrplot(method=&quot;number&quot;, type=&quot;lower&quot;)
+&quot;&quot;&quot;</span><span class='hljl-t'>
+
+</span><span class='hljl-so'>R&quot;&quot;&quot;
+spr_critregion %&gt;% 
+  distinct(id, .keep_all=TRUE) %&gt;% 
+  select(vocab_z, wgt_z, art_z, reading_exp_z, age_z) %&gt;% 
+  drop_na() %&gt;% 
+  cor(method = &quot;pearson&quot;) %&gt;% 
+  corrplot(method=&quot;number&quot;, type=&quot;lower&quot;)
+&quot;&quot;&quot;</span>
+</pre>
+
+
+<pre class="output">
+RObject&#123;RealSxp&#125;
+                vocab_z     wgt_z     art_z reading_exp_z     age_z
+vocab_z       1.0000000 0.6173466 0.4779128     0.8455234 0.2555615
+wgt_z         0.6173466 1.0000000 0.4269619     0.8302946 0.3497973
+art_z         0.4779128 0.4269619 1.0000000     0.7824802 0.3779833
+reading_exp_z 0.8455234 0.8302946 0.7824802     1.0000000 0.4021296
+age_z         0.2555615 0.3497973 0.3779833     0.4021296 1.0000000
+</pre>
+
+
+<p>Correlation between predictors is only moderate. In any case, correlation should cause standard errors to go up &#40;and t-values to go down&#41;, resulting in a loss of power, but it shouldn&#39;t affect coefficients. </p>
+<p>However, the inclusion of current word frequencies has a different meaning based on position – in the critical position &#40;the noun&#41;, current and previous word frequencies are vital parts of the calculation of forward and backward TP. In the spillover region, on the other hand, this is greatly reduced &#40;previous word freq. of spillover_1 is part of back TP, but all others are not used in TP calculations&#41;. For this reason, we use word length to proxy word frequency.</p>
+<p>Correlation between experience-based measures &#40;and age&#41; stronger, as would be expected. Thus we create an overall measure of reading experience taken by adding the z-scores of the three reading assessments. </p>
+<h3>Set contrasts</h3>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>cntrsts</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>merge</span><span class='hljl-p'>(</span><span class='hljl-t'>
+    </span><span class='hljl-nf'>Dict</span><span class='hljl-p'>(</span><span class='hljl-sc'>:position</span><span class='hljl-t'> </span><span class='hljl-oB'>=&gt;</span><span class='hljl-t'> </span><span class='hljl-nf'>EffectsCoding</span><span class='hljl-p'>(</span><span class='hljl-n'>base</span><span class='hljl-oB'>=</span><span class='hljl-s'>&quot;spillover_2&quot;</span><span class='hljl-p'>),</span><span class='hljl-t'>
+         </span><span class='hljl-sc'>:education</span><span class='hljl-t'> </span><span class='hljl-oB'>=&gt;</span><span class='hljl-t'> </span><span class='hljl-nf'>HelmertCoding</span><span class='hljl-p'>(</span><span class='hljl-n'>levels</span><span class='hljl-oB'>=</span><span class='hljl-p'>[</span><span class='hljl-s'>&quot;High school&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;Trade school&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;Undergraduate&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;Grad school&quot;</span><span class='hljl-p'>]),</span><span class='hljl-t'>
+         </span><span class='hljl-sc'>:id</span><span class='hljl-t'> </span><span class='hljl-oB'>=&gt;</span><span class='hljl-t'> </span><span class='hljl-nf'>Grouping</span><span class='hljl-p'>(),</span><span class='hljl-t'>
+         </span><span class='hljl-sc'>:w1</span><span class='hljl-t'> </span><span class='hljl-oB'>=&gt;</span><span class='hljl-t'> </span><span class='hljl-nf'>Grouping</span><span class='hljl-p'>(),</span><span class='hljl-t'>
+         </span><span class='hljl-sc'>:w2</span><span class='hljl-t'> </span><span class='hljl-oB'>=&gt;</span><span class='hljl-t'> </span><span class='hljl-nf'>Grouping</span><span class='hljl-p'>())</span><span class='hljl-t'>
+</span><span class='hljl-p'>);</span>
+</pre>
+
+
+
+<h2>Maximal model critical word</h2>
+<p>Partially-crossed random effects on W1 and W2 to distinguish between the different types of control in item design. This should also take care of any differences between pairings, like differences in average bigram frequency, but also control for variability in the quality of synonymy and the lexical characteristics of each word. </p>
+<p>Step 1 - Initial maximal models:</p>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>formula_maximal_ftp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>FTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>FTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
+
+</span><span class='hljl-n'>formula_maximal_btp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>BTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>  </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>BTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
+
+</span><span class='hljl-cs'>#maximal_ftp = fit(MixedModel, formula_maximal_ftp, spr_critregion, contrasts = cntrsts);</span><span class='hljl-t'>
+</span><span class='hljl-cs'>#maximal_ftp.rePCA</span><span class='hljl-t'>
+</span><span class='hljl-cs'>#VarCorr(maximal_ftp)</span><span class='hljl-t'>
+
+</span><span class='hljl-cs'>#maximal_btp = fit(MixedModel, formula_maximal_btp, spr_critregion, contrasts = cntrsts);</span><span class='hljl-t'>
+</span><span class='hljl-cs'>#maximal_btp.rePCA</span><span class='hljl-t'>
+</span><span class='hljl-cs'>#VarCorr(maximal_btp)</span>
+</pre>
+
+
+
+<p>To avoid introducing differences between W1/W2 random effects and between age/reading<em>exp, age * reading</em>exp slope was removed on both the words and the effects on their own as well. These terms were already not very informative and keeping one of the two as a random slope or keeping them on one word but not the other would have introduced an imbalance in the model structure. Also removed the TPs from id to allow for the same random effects structure as they were already not very informative, and word_number was also not very informative.</p>
+<p>Step 2 - Reduced random effect structure:</p>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>formula_btp1</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>BTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
+
+</span><span class='hljl-n'>formula_ftp1</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>FTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
+
+</span><span class='hljl-cs'>#region_ftp = fit(MixedModel, formula_ftp1, spr_critregion, contrasts=cntrsts);</span><span class='hljl-t'>
+</span><span class='hljl-cs'>#region_btp = fit(MixedModel, formula_btp1, spr_critregion, contrasts=cntrsts);</span>
+</pre>
+
+
+
+<h2>Final model</h2>
+<p>Step 3 - Remove the non-significant three/four-way interactions for final model:</p>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>formula_btp2</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>BTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
+
+</span><span class='hljl-n'>formula_ftp2</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>FTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
+
+</span><span class='hljl-n'>region_ftp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>fit</span><span class='hljl-p'>(</span><span class='hljl-n'>MixedModel</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>formula_ftp2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>contrasts</span><span class='hljl-oB'>=</span><span class='hljl-n'>cntrsts</span><span class='hljl-p'>);</span><span class='hljl-t'>
+</span><span class='hljl-n'>region_btp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>fit</span><span class='hljl-p'>(</span><span class='hljl-n'>MixedModel</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>formula_btp2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>contrasts</span><span class='hljl-oB'>=</span><span class='hljl-n'>cntrsts</span><span class='hljl-p'>);</span><span class='hljl-t'>
+
+</span><span class='hljl-nf'>show</span><span class='hljl-p'>(</span><span class='hljl-n'>region_ftp</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>show</span><span class='hljl-p'>(</span><span class='hljl-n'>region_btp</span><span class='hljl-p'>)</span>
+</pre>
+
+
+<pre class="output">
+Linear mixed model fit by maximum likelihood
+ logRT ~ 1 &#43; FTP_lz &#43; reading_exp_z &#43; age_z &#43; position &#43; trial_number_z &#43; w
+ord_number_z &#43; length_z &#43; prev_length_z &#43; education &#43; FTP_lz &amp; reading_exp_
+z &#43; FTP_lz &amp; age_z &#43; FTP_lz &amp; position &#43; position &amp; age_z &#43; position &amp; read
+ing_exp_z &#43; &#40;1 &#43; trial_number_z &#43; length_z &#43; prev_length_z | id&#41; &#43; &#40;1 &#43; tri
+al_number_z | w1&#41; &#43; &#40;1 &#43; trial_number_z | w2&#41;
+   logLik   -2 logLik     AIC       AICc        BIC    
+  -900.0525  1800.1049  1876.1049  1876.1452  2225.9745
+
+Variance components:
+             Column      Variance   Std.Dev.    Corr.
+id       &#40;Intercept&#41;     0.07228467 0.26885808
+         trial_number_z  0.00365425 0.06045036 -0.26
+         length_z        0.00052970 0.02301517 &#43;0.65 -0.05
+         prev_length_z   0.00077359 0.02781356 &#43;0.50 &#43;0.10 &#43;0.51
+w2       &#40;Intercept&#41;     0.00017898 0.01337821
+         trial_number_z  0.00009578 0.00978665 -0.50
+w1       &#40;Intercept&#41;     0.00041778 0.02043956
+         trial_number_z  0.00006313 0.00794565 &#43;0.09
+Residual                 0.05854554 0.24196186
+ Number of obs: 73651; levels of grouping factors: 97, 143, 135
+
+  Fixed-effects parameters:
+───────────────────────────────────────────────────────────────────────────
+──────
+                                              Coef.  Std. Error       z  Pr
+&#40;&gt;|z|&#41;
+───────────────────────────────────────────────────────────────────────────
+──────
+&#40;Intercept&#41;                             5.7129       0.0287101   198.99    
+&lt;1e-99
+FTP_lz                                 -0.00208952   0.00179635   -1.16    
+0.2447
+reading_exp_z                          -0.0262739    0.0232919    -1.13    
+0.2593
+age_z                                   0.098225     0.0222825     4.41    
+&lt;1e-4
+position: noun                         -0.00835953   0.0019742    -4.23    
+&lt;1e-4
+position: spillover_1                   0.0151645    0.00139722   10.85    
+&lt;1e-26
+trial_number_z                         -0.112194     0.00629684  -17.82    
+&lt;1e-70
+word_number_z                          -0.0062197    0.00139538   -4.46    
+&lt;1e-5
+length_z                                0.0126379    0.00263258    4.80    
+&lt;1e-5
+prev_length_z                           0.026477     0.00313684    8.44    
+&lt;1e-16
+education: Trade school                -0.0997987    0.0311924    -3.20    
+0.0014
+education: Undergraduate               -0.000973013  0.0141505    -0.07    
+0.9452
+education: Grad school                  0.0107356    0.0142931     0.75    
+0.4526
+FTP_lz &amp; reading_exp_z                  0.00215701   0.00113336    1.90    
+0.0570
+FTP_lz &amp; age_z                         -0.0024274    0.00106921   -2.27    
+0.0232
+FTP_lz &amp; position: noun                 0.00619177   0.00126637    4.89    
+&lt;1e-5
+FTP_lz &amp; position: spillover_1         -0.00065052   0.00126111   -0.52    
+0.6060
+position: noun &amp; age_z                  0.00437423   0.00173178    2.53    
+0.0115
+position: spillover_1 &amp; age_z          -0.0017843    0.00146147   -1.22    
+0.2221
+position: noun &amp; reading_exp_z         -0.00980501   0.00183109   -5.35    
+&lt;1e-7
+position: spillover_1 &amp; reading_exp_z   0.00358648   0.00154456    2.32    
+0.0202
+───────────────────────────────────────────────────────────────────────────
+──────Linear mixed model fit by maximum likelihood
+ logRT ~ 1 &#43; BTP_lz &#43; reading_exp_z &#43; age_z &#43; position &#43; trial_number_z &#43; w
+ord_number_z &#43; length_z &#43; prev_length_z &#43; education &#43; BTP_lz &amp; reading_exp_
+z &#43; BTP_lz &amp; age_z &#43; BTP_lz &amp; position &#43; position &amp; age_z &#43; position &amp; read
+ing_exp_z &#43; &#40;1 &#43; trial_number_z &#43; length_z &#43; prev_length_z | id&#41; &#43; &#40;1 &#43; tri
+al_number_z | w1&#41; &#43; &#40;1 &#43; trial_number_z | w2&#41;
+   logLik   -2 logLik     AIC       AICc        BIC    
+  -908.4117  1816.8233  1892.8233  1892.8636  2242.6928
+
+Variance components:
+             Column      Variance   Std.Dev.    Corr.
+id       &#40;Intercept&#41;     0.07231415 0.26891290
+         trial_number_z  0.00366595 0.06054711 -0.26
+         length_z        0.00053213 0.02306797 &#43;0.65 -0.05
+         prev_length_z   0.00077319 0.02780627 &#43;0.50 &#43;0.10 &#43;0.51
+w2       &#40;Intercept&#41;     0.00019651 0.01401813
+         trial_number_z  0.00009572 0.00978391 -0.44
+w1       &#40;Intercept&#41;     0.00036468 0.01909654
+         trial_number_z  0.00006373 0.00798329 &#43;0.07
+Residual                 0.05856222 0.24199633
+ Number of obs: 73651; levels of grouping factors: 97, 143, 135
+
+  Fixed-effects parameters:
+───────────────────────────────────────────────────────────────────────────
+──────
+                                              Coef.  Std. Error       z  Pr
+&#40;&gt;|z|&#41;
+───────────────────────────────────────────────────────────────────────────
+──────
+&#40;Intercept&#41;                             5.71269      0.0287125   198.96    
+&lt;1e-99
+BTP_lz                                 -0.00458332   0.00174564   -2.63    
+0.0087
+reading_exp_z                          -0.0243169    0.0233097    -1.04    
+0.2969
+age_z                                   0.0964501    0.0223035     4.32    
+&lt;1e-4
+position: noun                         -0.00940975   0.00197872   -4.76    
+&lt;1e-5
+position: spillover_1                   0.0150675    0.00140265   10.74    
+&lt;1e-26
+trial_number_z                         -0.112221     0.00630667  -17.79    
+&lt;1e-70
+word_number_z                          -0.00612972   0.001386     -4.42    
+&lt;1e-5
+length_z                                0.0130912    0.00264134    4.96    
+&lt;1e-6
+prev_length_z                           0.0277022    0.00314785    8.80    
+&lt;1e-17
+education: Trade school                -0.0997855    0.0312133    -3.20    
+0.0014
+education: Undergraduate               -0.000941638  0.0141598    -0.07    
+0.9470
+education: Grad school                  0.010826     0.0143026     0.76    
+0.4491
+BTP_lz &amp; reading_exp_z                  0.00288562   0.00108279    2.66    
+0.0077
+BTP_lz &amp; age_z                         -0.00227834   0.00101875   -2.24    
+0.0253
+BTP_lz &amp; position: noun                 0.0013518    0.00129242    1.05    
+0.2956
+BTP_lz &amp; position: spillover_1         -0.00281309   0.00128714   -2.19    
+0.0288
+position: noun &amp; age_z                  0.00412384   0.00173367    2.38    
+0.0174
+position: spillover_1 &amp; age_z          -0.0016762    0.00146206   -1.15    
+0.2516
+position: noun &amp; reading_exp_z         -0.00951406   0.00183266   -5.19    
+&lt;1e-6
+position: spillover_1 &amp; reading_exp_z   0.00346723   0.00154518    2.24    
+0.0248
+───────────────────────────────────────────────────────────────────────────
+──────
+</pre>
+
+
+<h2>Plot interactions using R</h2>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>region_ftp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>region_ftp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>);</span><span class='hljl-t'> </span><span class='hljl-cs'>#tuple that wraps the fitted model and the dataframe</span><span class='hljl-t'>
+</span><span class='hljl-nd'>@rput</span><span class='hljl-t'> </span><span class='hljl-n'>region_ftp</span><span class='hljl-p'>;</span><span class='hljl-t'>
+
+</span><span class='hljl-n'>region_btp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>region_btp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>);</span><span class='hljl-t'> </span><span class='hljl-cs'>#tuple that wraps the fitted model and the dataframe</span><span class='hljl-t'>
+</span><span class='hljl-nd'>@rput</span><span class='hljl-t'> </span><span class='hljl-n'>region_btp</span><span class='hljl-p'>;</span><span class='hljl-t'>
+
+</span><span class='hljl-so'>R&quot;&quot;&quot;
+plot(ggpredict(region_ftp, terms = c(&quot;FTP_lz&quot;, &quot;position&quot;)), facet = T, colors = &quot;viridis&quot;)
+&quot;&quot;&quot;</span><span class='hljl-t'>
+
+</span><span class='hljl-so'>R&quot;&quot;&quot;
+plot(ggpredict(region_ftp, terms = c(&quot;FTP_lz&quot;, &quot;age_z [quart]&quot;)), colors = &quot;viridis&quot;)
+&quot;&quot;&quot;</span><span class='hljl-t'>
+
+</span><span class='hljl-so'>R&quot;&quot;&quot;
+plot(ggpredict(region_ftp, terms = c(&quot;FTP_lz&quot;, &quot;reading_exp_z [quart]&quot;)), colors = &quot;viridis&quot;)
+&quot;&quot;&quot;</span><span class='hljl-t'>
+
+</span><span class='hljl-so'>R&quot;&quot;&quot;
+plot(ggpredict(region_btp, terms = c(&quot;BTP_lz&quot;, &quot;position&quot;)), facet = T, colors = &quot;viridis&quot;)
+&quot;&quot;&quot;</span><span class='hljl-t'>
+
+</span><span class='hljl-so'>R&quot;&quot;&quot;
+plot(ggpredict(region_btp, terms = c(&quot;BTP_lz&quot;, &quot;age_z [quart]&quot;)), colors = &quot;viridis&quot;)
+&quot;&quot;&quot;</span><span class='hljl-t'>
+
+</span><span class='hljl-so'>R&quot;&quot;&quot;
+plot(ggpredict(region_btp, terms = c(&quot;BTP_lz&quot;, &quot;reading_exp_z [quart]&quot;)), colors = &quot;viridis&quot;)
+&quot;&quot;&quot;</span>
+</pre>
+
+
+<pre class="output">
+RObject&#123;VecSxp&#125;
+</pre>
+
+
+<h2>Model diagnostics</h2>
+
+
+<pre class='hljl'>
+<span class='hljl-so'>R&quot;&quot;&quot;
+library(performance)
+check_model(region_btp)
+&quot;&quot;&quot;</span><span class='hljl-t'>
+
+</span><span class='hljl-so'>R&quot;&quot;&quot;
+check_model(region_ftp)
+&quot;&quot;&quot;</span>
+</pre>
+
+
+<pre class="output">
+RObject&#123;VecSxp&#125;
+</pre>
+
+
+
+        <HR/>
+        <div class="footer">
+          <p>
+            Published from <a href="spr_analysis_colloc.jmd">spr_analysis_colloc.jmd</a>
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.3 on 2021-04-20.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</BODY>
+
+</HTML>
