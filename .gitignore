@@ -2,4 +2,4 @@
 *.RHistory
 *.RData
 .DS_Store
-data/critregion_exp.txt
+data/*

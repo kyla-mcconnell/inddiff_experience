@@ -664,7 +664,8 @@ div.title {text-align: center;}
 
 <pre class='hljl'>
 <span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>MixedModels</span><span class='hljl-t'>
-</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>CSV</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>DataFrames</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>DataFramesMeta</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>CSV</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>DataFrames</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>DataFramesMacros</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>StatsBase</span><span class='hljl-t'>
 </span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>RCall</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>JellyMe4</span><span class='hljl-t'> 
 </span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>Random</span><span class='hljl-t'>
 
@@ -677,6 +678,7 @@ library(car)
 library(corrplot)
 library(ggeffects)
 library(LMERConvenienceFunctions)
+library(viridis)
 &quot;&quot;&quot;</span><span class='hljl-p'>;</span>
 </pre>
 
@@ -704,8 +706,6 @@ library(LMERConvenienceFunctions)
 </li>
 <li><p>FTP_lz: log-transformed forward transition probability of words in bigram &#40;z-scored&#41;</p>
 </li>
-<li><p>bigram<em>freq</em>lz: log-transformed bigram frequency &#40;z-scored&#41;</p>
-</li>
 <li><p>age_z: age in years &#40;z-scored&#41;</p>
 </li>
 <li><p>reading<em>exp</em>z: added score from Words that Go Together task, Author Recognition task and synonym-based vocabulary task, then z-scored</p>
@@ -715,9 +715,9 @@ library(LMERConvenienceFunctions)
 <ul>
 <li><p>length_z: length of current word &#40;z-scored&#41;</p>
 </li>
-<li><p>prev<em>length</em>z: length of previous word &#40;z-scored&#41;</p>
+<li><p>prev_length_z: length of previous word &#40;z-scored&#41;</p>
 </li>
-<li><p>trial<em>number</em>z: trial number &#40;z-scored&#41;</p>
+<li><p>trial_number_z: trial number &#40;z-scored&#41;</p>
 </li>
 <li><p>education: level of education &#40;4 levels from  high school to graduate degree&#41;</p>
 </li>
@@ -744,12 +744,10 @@ library(LMERConvenienceFunctions)
 
 
 <pre class='hljl'>
-<span class='hljl-n'>spr_critregion</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>DataFrame</span><span class='hljl-p'>(</span><span class='hljl-n'>CSV</span><span class='hljl-oB'>.</span><span class='hljl-nf'>read</span><span class='hljl-p'>(</span><span class='hljl-nf'>joinpath</span><span class='hljl-p'>(</span><span class='hljl-nd'>@__DIR__</span><span class='hljl-p'>,</span><span class='hljl-s'>&quot;data/critregion_exp.txt&quot;</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>delim</span><span class='hljl-oB'>=</span><span class='hljl-s'>&quot;</span><span class='hljl-se'>\t</span><span class='hljl-s'>&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>header</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-p'>));</span>
+<span class='hljl-n'>spr_critregion</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>CSV</span><span class='hljl-oB'>.</span><span class='hljl-nf'>read</span><span class='hljl-p'>(</span><span class='hljl-nf'>joinpath</span><span class='hljl-p'>(</span><span class='hljl-nd'>@__DIR__</span><span class='hljl-p'>,</span><span class='hljl-s'>&quot;data/critregion_exp.txt&quot;</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>delim</span><span class='hljl-oB'>=</span><span class='hljl-s'>&quot;</span><span class='hljl-se'>\t</span><span class='hljl-s'>&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>header</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>DataFrame</span><span class='hljl-p'>);</span>
 </pre>
 
 
-
-<table class="data-frame"><thead><tr><th></th><th>id</th><th>type</th><th>group</th><th>word_in_sentence</th><th>item</th><th>RT</th></tr><tr><th></th><th>String</th><th>String</th><th>String</th><th>Int64</th><th>String</th><th>Int64</th></tr></thead><tbody><p>73,651 rows × 62 columns (omitted printing of 56 columns)</p><tr><th>1</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>6</td><td>applicants</td><td>297</td></tr><tr><th>2</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>from</td><td>471</td></tr><tr><th>3</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>the</td><td>284</td></tr><tr><th>4</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>pressures</td><td>322</td></tr><tr><th>5</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>on</td><td>317</td></tr><tr><th>6</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>9</td><td>the</td><td>417</td></tr><tr><th>7</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>6</td><td>explanations</td><td>448</td></tr><tr><th>8</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>that</td><td>439</td></tr><tr><th>9</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>were</td><td>379</td></tr><tr><th>10</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>6</td><td>bench</td><td>379</td></tr><tr><th>11</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>was</td><td>461</td></tr><tr><th>12</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>all</td><td>366</td></tr><tr><th>13</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>6</td><td>in</td><td>387</td></tr><tr><th>14</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>her</td><td>319</td></tr><tr><th>15</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>6</td><td>horizon</td><td>246</td></tr><tr><th>16</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>was</td><td>481</td></tr><tr><th>17</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>hanging</td><td>242</td></tr><tr><th>18</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>connection</td><td>463</td></tr><tr><th>19</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>was</td><td>266</td></tr><tr><th>20</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>9</td><td>supposed</td><td>276</td></tr><tr><th>21</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>6</td><td>management</td><td>372</td></tr><tr><th>22</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>7</td><td>to</td><td>316</td></tr><tr><th>23</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>8</td><td>make</td><td>342</td></tr><tr><th>24</th><td>AI200</td><td>DashedSentence</td><td>Exp1_ListA_firstPair</td><td>5</td><td>genius</td><td>453</td></tr><tr><th>&vellip;</th><td>&vellip;</td><td>&vellip;</td><td>&vellip;</td><td>&vellip;</td><td>&vellip;</td><td>&vellip;</td></tr></tbody></table>
 
 <h2>Correlation between predictors</h2>
 
@@ -759,7 +757,7 @@ library(LMERConvenienceFunctions)
 
 </span><span class='hljl-so'>R&quot;&quot;&quot;
 spr_critregion %&gt;% 
-  select(bigram_freq_lz, freq_lz, prev_freq_lz, BTP_lz, FTP_lz, length_z, prev_length_z) %&gt;% 
+  select(bfreq_lz, freq_lz, prev_freq_lz, BTP_lz, FTP_lz, length_z, prev_length_z) %&gt;% 
   cor(method=&quot;spearman&quot;) %&gt;% 
   corrplot(method=&quot;number&quot;, type=&quot;lower&quot;)
 &quot;&quot;&quot;</span><span class='hljl-t'>
@@ -769,21 +767,11 @@ spr_critregion %&gt;%
   distinct(id, .keep_all=TRUE) %&gt;% 
   select(vocab_z, wgt_z, art_z, reading_exp_z, age_z) %&gt;% 
   drop_na() %&gt;% 
-  cor(method = &quot;pearson&quot;) %&gt;% 
+  cor(method = &quot;spearman&quot;) %&gt;% 
   corrplot(method=&quot;number&quot;, type=&quot;lower&quot;)
 &quot;&quot;&quot;</span>
 </pre>
 
-
-<pre class="output">
-RObject&#123;RealSxp&#125;
-                vocab_z     wgt_z     art_z reading_exp_z     age_z
-vocab_z       1.0000000 0.6173466 0.4779128     0.8455234 0.2555615
-wgt_z         0.6173466 1.0000000 0.4269619     0.8302946 0.3497973
-art_z         0.4779128 0.4269619 1.0000000     0.7824802 0.3779833
-reading_exp_z 0.8455234 0.8302946 0.7824802     1.0000000 0.4021296
-age_z         0.2555615 0.3497973 0.3779833     0.4021296 1.0000000
-</pre>
 
 
 <p>Correlation between predictors is only moderate. In any case, correlation should cause standard errors to go up &#40;and t-values to go down&#41;, resulting in a loss of power, but it shouldn&#39;t affect coefficients. </p>
@@ -796,6 +784,7 @@ age_z         0.2555615 0.3497973 0.3779833     0.4021296 1.0000000
 <span class='hljl-n'>cntrsts</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>merge</span><span class='hljl-p'>(</span><span class='hljl-t'>
     </span><span class='hljl-nf'>Dict</span><span class='hljl-p'>(</span><span class='hljl-sc'>:position</span><span class='hljl-t'> </span><span class='hljl-oB'>=&gt;</span><span class='hljl-t'> </span><span class='hljl-nf'>EffectsCoding</span><span class='hljl-p'>(</span><span class='hljl-n'>base</span><span class='hljl-oB'>=</span><span class='hljl-s'>&quot;spillover_2&quot;</span><span class='hljl-p'>),</span><span class='hljl-t'>
          </span><span class='hljl-sc'>:education</span><span class='hljl-t'> </span><span class='hljl-oB'>=&gt;</span><span class='hljl-t'> </span><span class='hljl-nf'>HelmertCoding</span><span class='hljl-p'>(</span><span class='hljl-n'>levels</span><span class='hljl-oB'>=</span><span class='hljl-p'>[</span><span class='hljl-s'>&quot;High school&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;Trade school&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;Undergraduate&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;Grad school&quot;</span><span class='hljl-p'>]),</span><span class='hljl-t'>
+         </span><span class='hljl-sc'>:origin</span><span class='hljl-t'> </span><span class='hljl-oB'>=&gt;</span><span class='hljl-t'> </span><span class='hljl-nf'>DummyCoding</span><span class='hljl-p'>(</span><span class='hljl-n'>base</span><span class='hljl-oB'>=</span><span class='hljl-s'>&quot;USA&quot;</span><span class='hljl-p'>),</span><span class='hljl-t'>
          </span><span class='hljl-sc'>:id</span><span class='hljl-t'> </span><span class='hljl-oB'>=&gt;</span><span class='hljl-t'> </span><span class='hljl-nf'>Grouping</span><span class='hljl-p'>(),</span><span class='hljl-t'>
          </span><span class='hljl-sc'>:w1</span><span class='hljl-t'> </span><span class='hljl-oB'>=&gt;</span><span class='hljl-t'> </span><span class='hljl-nf'>Grouping</span><span class='hljl-p'>(),</span><span class='hljl-t'>
          </span><span class='hljl-sc'>:w2</span><span class='hljl-t'> </span><span class='hljl-oB'>=&gt;</span><span class='hljl-t'> </span><span class='hljl-nf'>Grouping</span><span class='hljl-p'>())</span><span class='hljl-t'>
@@ -806,7 +795,7 @@ age_z         0.2555615 0.3497973 0.3779833     0.4021296 1.0000000
 
 <h2>Maximal model critical word</h2>
 <p>Partially-crossed random effects on W1 and W2 to distinguish between the different types of control in item design. This should also take care of any differences between pairings, like differences in average bigram frequency, but also control for variability in the quality of synonymy and the lexical characteristics of each word. </p>
-<p>Step 1 - Initial maximal models:</p>
+<p>Step 1 - Initial &#40;essentially&#41; maximal models:</p>
 
 
 <pre class='hljl'>
@@ -836,39 +825,18 @@ age_z         0.2555615 0.3497973 0.3779833     0.4021296 1.0000000
 
 
 <pre class='hljl'>
-<span class='hljl-n'>formula_btp1</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>BTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+<span class='hljl-n'>formula_btp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>BTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
                </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
                </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
                </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
 
-</span><span class='hljl-n'>formula_ftp1</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>FTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+</span><span class='hljl-n'>formula_ftp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>FTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
                </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
                </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
                </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
 
-</span><span class='hljl-cs'>#region_ftp = fit(MixedModel, formula_ftp1, spr_critregion, contrasts=cntrsts);</span><span class='hljl-t'>
-</span><span class='hljl-cs'>#region_btp = fit(MixedModel, formula_btp1, spr_critregion, contrasts=cntrsts);</span>
-</pre>
-
-
-
-<h2>Final model</h2>
-<p>Step 3 - Remove the non-significant three/four-way interactions for final model:</p>
-
-
-<pre class='hljl'>
-<span class='hljl-n'>formula_btp2</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>BTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
-               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
-               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
-               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
-
-</span><span class='hljl-n'>formula_ftp2</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>FTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
-               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
-               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
-               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
-
-</span><span class='hljl-n'>region_ftp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>fit</span><span class='hljl-p'>(</span><span class='hljl-n'>MixedModel</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>formula_ftp2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>contrasts</span><span class='hljl-oB'>=</span><span class='hljl-n'>cntrsts</span><span class='hljl-p'>);</span><span class='hljl-t'>
-</span><span class='hljl-n'>region_btp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>fit</span><span class='hljl-p'>(</span><span class='hljl-n'>MixedModel</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>formula_btp2</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>contrasts</span><span class='hljl-oB'>=</span><span class='hljl-n'>cntrsts</span><span class='hljl-p'>);</span><span class='hljl-t'>
+</span><span class='hljl-n'>region_ftp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>fit</span><span class='hljl-p'>(</span><span class='hljl-n'>MixedModel</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>formula_ftp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>contrasts</span><span class='hljl-oB'>=</span><span class='hljl-n'>cntrsts</span><span class='hljl-p'>);</span><span class='hljl-t'>
+</span><span class='hljl-n'>region_btp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>fit</span><span class='hljl-p'>(</span><span class='hljl-n'>MixedModel</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>formula_btp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>contrasts</span><span class='hljl-oB'>=</span><span class='hljl-n'>cntrsts</span><span class='hljl-p'>);</span><span class='hljl-t'>
 
 </span><span class='hljl-nf'>show</span><span class='hljl-p'>(</span><span class='hljl-n'>region_ftp</span><span class='hljl-p'>)</span><span class='hljl-t'>
 </span><span class='hljl-nf'>show</span><span class='hljl-p'>(</span><span class='hljl-n'>region_btp</span><span class='hljl-p'>)</span>
@@ -879,148 +847,194 @@ age_z         0.2555615 0.3497973 0.3779833     0.4021296 1.0000000
 Linear mixed model fit by maximum likelihood
  logRT ~ 1 &#43; FTP_lz &#43; reading_exp_z &#43; age_z &#43; position &#43; trial_number_z &#43; w
 ord_number_z &#43; length_z &#43; prev_length_z &#43; education &#43; FTP_lz &amp; reading_exp_
-z &#43; FTP_lz &amp; age_z &#43; FTP_lz &amp; position &#43; position &amp; age_z &#43; position &amp; read
-ing_exp_z &#43; &#40;1 &#43; trial_number_z &#43; length_z &#43; prev_length_z | id&#41; &#43; &#40;1 &#43; tri
-al_number_z | w1&#41; &#43; &#40;1 &#43; trial_number_z | w2&#41;
+z &#43; FTP_lz &amp; age_z &#43; reading_exp_z &amp; age_z &#43; FTP_lz &amp; position &#43; reading_ex
+p_z &amp; position &#43; age_z &amp; position &#43; FTP_lz &amp; reading_exp_z &amp; age_z &#43; FTP_lz
+ &amp; reading_exp_z &amp; position &#43; FTP_lz &amp; age_z &amp; position &#43; reading_exp_z &amp; a
+ge_z &amp; position &#43; FTP_lz &amp; reading_exp_z &amp; age_z &amp; position &#43; &#40;1 &#43; trial_nu
+mber_z &#43; length_z &#43; prev_length_z | id&#41; &#43; &#40;1 &#43; trial_number_z | w1&#41; &#43; &#40;1 &#43; 
+trial_number_z | w2&#41;
    logLik   -2 logLik     AIC       AICc        BIC    
-  -900.0525  1800.1049  1876.1049  1876.1452  2225.9745
+ -2001.3509  4002.7019  4098.7019  4098.7657  4540.6677
 
 Variance components:
              Column      Variance   Std.Dev.    Corr.
-id       &#40;Intercept&#41;     0.07228467 0.26885808
-         trial_number_z  0.00365425 0.06045036 -0.26
-         length_z        0.00052970 0.02301517 &#43;0.65 -0.05
-         prev_length_z   0.00077359 0.02781356 &#43;0.50 &#43;0.10 &#43;0.51
-w2       &#40;Intercept&#41;     0.00017898 0.01337821
-         trial_number_z  0.00009578 0.00978665 -0.50
-w1       &#40;Intercept&#41;     0.00041778 0.02043956
-         trial_number_z  0.00006313 0.00794565 &#43;0.09
-Residual                 0.05854554 0.24196186
- Number of obs: 73651; levels of grouping factors: 97, 143, 135
+id       &#40;Intercept&#41;     0.07229761 0.26888214
+         trial_number_z  0.00369399 0.06077824 -0.25
+         length_z        0.00053740 0.02318200 &#43;0.65 -0.02
+         prev_length_z   0.00077398 0.02782048 &#43;0.50 &#43;0.10 &#43;0.53
+w2       &#40;Intercept&#41;     0.00018945 0.01376397
+         trial_number_z  0.00008598 0.00927241 -0.42
+w1       &#40;Intercept&#41;     0.00039948 0.01998700
+         trial_number_z  0.00006772 0.00822910 &#43;0.08
+Residual                 0.06033681 0.24563553
+ Number of obs: 73690; levels of grouping factors: 97, 143, 135
 
   Fixed-effects parameters:
 ───────────────────────────────────────────────────────────────────────────
-──────
-                                              Coef.  Std. Error       z  Pr
-&#40;&gt;|z|&#41;
+────────────────────────
+                                                               Coef.   Std.
+ Error       z  Pr&#40;&gt;|z|&#41;
 ───────────────────────────────────────────────────────────────────────────
-──────
-&#40;Intercept&#41;                             5.7129       0.0287101   198.99    
-&lt;1e-99
-FTP_lz                                 -0.00208952   0.00179635   -1.16    
-0.2447
-reading_exp_z                          -0.0262739    0.0232919    -1.13    
-0.2593
-age_z                                   0.098225     0.0222825     4.41    
-&lt;1e-4
-position: noun                         -0.00835953   0.0019742    -4.23    
-&lt;1e-4
-position: spillover_1                   0.0151645    0.00139722   10.85    
-&lt;1e-26
-trial_number_z                         -0.112194     0.00629684  -17.82    
-&lt;1e-70
-word_number_z                          -0.0062197    0.00139538   -4.46    
-&lt;1e-5
-length_z                                0.0126379    0.00263258    4.80    
-&lt;1e-5
-prev_length_z                           0.026477     0.00313684    8.44    
-&lt;1e-16
-education: Trade school                -0.0997987    0.0311924    -3.20    
-0.0014
-education: Undergraduate               -0.000973013  0.0141505    -0.07    
-0.9452
-education: Grad school                  0.0107356    0.0142931     0.75    
-0.4526
-FTP_lz &amp; reading_exp_z                  0.00215701   0.00113336    1.90    
-0.0570
-FTP_lz &amp; age_z                         -0.0024274    0.00106921   -2.27    
-0.0232
-FTP_lz &amp; position: noun                 0.00619177   0.00126637    4.89    
-&lt;1e-5
-FTP_lz &amp; position: spillover_1         -0.00065052   0.00126111   -0.52    
-0.6060
-position: noun &amp; age_z                  0.00437423   0.00173178    2.53    
-0.0115
-position: spillover_1 &amp; age_z          -0.0017843    0.00146147   -1.22    
-0.2221
-position: noun &amp; reading_exp_z         -0.00980501   0.00183109   -5.35    
-&lt;1e-7
-position: spillover_1 &amp; reading_exp_z   0.00358648   0.00154456    2.32    
-0.0202
+────────────────────────
+&#40;Intercept&#41;                                              5.71133      0.029
+2849    195.03    &lt;1e-99
+FTP_lz                                                  -0.00270136   0.001
+84768    -1.46    0.1437
+reading_exp_z                                           -0.0304806    0.023
+5029     -1.30    0.1947
+age_z                                                    0.0976805    0.023
+5488      4.15    &lt;1e-04
+position: noun                                          -0.00795295   0.002
+09094    -3.80    0.0001
+position: spillover_1                                    0.0157958    0.001
+50569    10.49    &lt;1e-25
+trial_number_z                                          -0.11249      0.006
+32853   -17.78    &lt;1e-69
+word_number_z                                           -0.00603748   0.001
+41212    -4.28    &lt;1e-04
+length_z                                                 0.0122736    0.002
+65613     4.62    &lt;1e-05
+prev_length_z                                            0.0266225    0.003
+14619     8.46    &lt;1e-16
+education: Trade school                                 -0.0979917    0.031
+1876     -3.14    0.0017
+education: Undergraduate                                -0.000764889  0.014
+544      -0.05    0.9581
+education: Grad school                                   0.0111226    0.014
+2967      0.78    0.4366
+FTP_lz &amp; reading_exp_z                                   0.00166919   0.001
+15774     1.44    0.1494
+FTP_lz &amp; age_z                                          -0.00261031   0.001
+15669    -2.26    0.0240
+reading_exp_z &amp; age_z                                    0.00191344   0.019
+7775      0.10    0.9229
+FTP_lz &amp; position: noun                                  0.00593985   0.001
+37055     4.33    &lt;1e-04
+FTP_lz &amp; position: spillover_1                          -0.000846256  0.001
+36424    -0.62    0.5351
+reading_exp_z &amp; position: noun                          -0.0102002    0.001
+87095    -5.45    &lt;1e-07
+reading_exp_z &amp; position: spillover_1                    0.00379842   0.001
+57717     2.41    0.0160
+age_z &amp; position: noun                                   0.0048299    0.001
+87409     2.58    0.0100
+age_z &amp; position: spillover_1                           -0.00107146   0.001
+58112    -0.68    0.4980
+FTP_lz &amp; reading_exp_z &amp; age_z                           0.00120817   0.000
+969001    1.25    0.2125
+FTP_lz &amp; reading_exp_z &amp; position: noun                  0.000768032  0.001
+4762      0.52    0.6029
+FTP_lz &amp; reading_exp_z &amp; position: spillover_1           0.000237741  0.001
+47038     0.16    0.8716
+FTP_lz &amp; age_z &amp; position: noun                          0.000693904  0.001
+47858     0.47    0.6389
+FTP_lz &amp; age_z &amp; position: spillover_1                  -0.000809191  0.001
+47308    -0.55    0.5828
+reading_exp_z &amp; age_z &amp; position: noun                  -0.000783986  0.001
+56729    -0.50    0.6169
+reading_exp_z &amp; age_z &amp; position: spillover_1           -0.00129919   0.001
+32132    -0.98    0.3255
+FTP_lz &amp; reading_exp_z &amp; age_z &amp; position: noun          0.000282478  0.001
+23602     0.23    0.8192
+FTP_lz &amp; reading_exp_z &amp; age_z &amp; position: spillover_1   0.000379282  0.001
+23117     0.31    0.7580
 ───────────────────────────────────────────────────────────────────────────
-──────Linear mixed model fit by maximum likelihood
+────────────────────────Linear mixed model fit by maximum likelihood
  logRT ~ 1 &#43; BTP_lz &#43; reading_exp_z &#43; age_z &#43; position &#43; trial_number_z &#43; w
 ord_number_z &#43; length_z &#43; prev_length_z &#43; education &#43; BTP_lz &amp; reading_exp_
-z &#43; BTP_lz &amp; age_z &#43; BTP_lz &amp; position &#43; position &amp; age_z &#43; position &amp; read
-ing_exp_z &#43; &#40;1 &#43; trial_number_z &#43; length_z &#43; prev_length_z | id&#41; &#43; &#40;1 &#43; tri
-al_number_z | w1&#41; &#43; &#40;1 &#43; trial_number_z | w2&#41;
+z &#43; BTP_lz &amp; age_z &#43; reading_exp_z &amp; age_z &#43; BTP_lz &amp; position &#43; reading_ex
+p_z &amp; position &#43; age_z &amp; position &#43; BTP_lz &amp; reading_exp_z &amp; age_z &#43; BTP_lz
+ &amp; reading_exp_z &amp; position &#43; BTP_lz &amp; age_z &amp; position &#43; reading_exp_z &amp; a
+ge_z &amp; position &#43; BTP_lz &amp; reading_exp_z &amp; age_z &amp; position &#43; &#40;1 &#43; trial_nu
+mber_z &#43; length_z &#43; prev_length_z | id&#41; &#43; &#40;1 &#43; trial_number_z | w1&#41; &#43; &#40;1 &#43; 
+trial_number_z | w2&#41;
    logLik   -2 logLik     AIC       AICc        BIC    
-  -908.4117  1816.8233  1892.8233  1892.8636  2242.6928
+ -2006.1709  4012.3418  4108.3418  4108.4057  4550.3077
 
 Variance components:
              Column      Variance   Std.Dev.    Corr.
-id       &#40;Intercept&#41;     0.07231415 0.26891290
-         trial_number_z  0.00366595 0.06054711 -0.26
-         length_z        0.00053213 0.02306797 &#43;0.65 -0.05
-         prev_length_z   0.00077319 0.02780627 &#43;0.50 &#43;0.10 &#43;0.51
-w2       &#40;Intercept&#41;     0.00019651 0.01401813
-         trial_number_z  0.00009572 0.00978391 -0.44
-w1       &#40;Intercept&#41;     0.00036468 0.01909654
-         trial_number_z  0.00006373 0.00798329 &#43;0.07
-Residual                 0.05856222 0.24199633
- Number of obs: 73651; levels of grouping factors: 97, 143, 135
+id       &#40;Intercept&#41;     0.07232384 0.26893092
+         trial_number_z  0.00370691 0.06088444 -0.24
+         length_z        0.00054008 0.02323967 &#43;0.65 -0.02
+         prev_length_z   0.00077390 0.02781912 &#43;0.50 &#43;0.10 &#43;0.52
+w2       &#40;Intercept&#41;     0.00020896 0.01445537
+         trial_number_z  0.00008658 0.00930477 -0.36
+w1       &#40;Intercept&#41;     0.00034536 0.01858385
+         trial_number_z  0.00006799 0.00824582 &#43;0.06
+Residual                 0.06034810 0.24565851
+ Number of obs: 73690; levels of grouping factors: 97, 143, 135
 
   Fixed-effects parameters:
 ───────────────────────────────────────────────────────────────────────────
-──────
-                                              Coef.  Std. Error       z  Pr
-&#40;&gt;|z|&#41;
+────────────────────────
+                                                               Coef.   Std.
+ Error       z  Pr&#40;&gt;|z|&#41;
 ───────────────────────────────────────────────────────────────────────────
-──────
-&#40;Intercept&#41;                             5.71269      0.0287125   198.96    
-&lt;1e-99
-BTP_lz                                 -0.00458332   0.00174564   -2.63    
-0.0087
-reading_exp_z                          -0.0243169    0.0233097    -1.04    
-0.2969
-age_z                                   0.0964501    0.0223035     4.32    
-&lt;1e-4
-position: noun                         -0.00940975   0.00197872   -4.76    
-&lt;1e-5
-position: spillover_1                   0.0150675    0.00140265   10.74    
-&lt;1e-26
-trial_number_z                         -0.112221     0.00630667  -17.79    
-&lt;1e-70
-word_number_z                          -0.00612972   0.001386     -4.42    
-&lt;1e-5
-length_z                                0.0130912    0.00264134    4.96    
-&lt;1e-6
-prev_length_z                           0.0277022    0.00314785    8.80    
-&lt;1e-17
-education: Trade school                -0.0997855    0.0312133    -3.20    
-0.0014
-education: Undergraduate               -0.000941638  0.0141598    -0.07    
-0.9470
-education: Grad school                  0.010826     0.0143026     0.76    
-0.4491
-BTP_lz &amp; reading_exp_z                  0.00288562   0.00108279    2.66    
-0.0077
-BTP_lz &amp; age_z                         -0.00227834   0.00101875   -2.24    
-0.0253
-BTP_lz &amp; position: noun                 0.0013518    0.00129242    1.05    
-0.2956
-BTP_lz &amp; position: spillover_1         -0.00281309   0.00128714   -2.19    
-0.0288
-position: noun &amp; age_z                  0.00412384   0.00173367    2.38    
-0.0174
-position: spillover_1 &amp; age_z          -0.0016762    0.00146206   -1.15    
-0.2516
-position: noun &amp; reading_exp_z         -0.00951406   0.00183266   -5.19    
-&lt;1e-6
-position: spillover_1 &amp; reading_exp_z   0.00346723   0.00154518    2.24    
-0.0248
+────────────────────────
+&#40;Intercept&#41;                                              5.71059      0.029
+2894    194.97    &lt;1e-99
+BTP_lz                                                  -0.00515164   0.001
+79213    -2.87    0.0040
+reading_exp_z                                           -0.0288617    0.023
+5307     -1.23    0.2200
+age_z                                                    0.0953837    0.023
+5775      4.05    &lt;1e-04
+position: noun                                          -0.00906975   0.002
+09527    -4.33    &lt;1e-04
+position: spillover_1                                    0.0157605    0.001
+51116    10.43    &lt;1e-24
+trial_number_z                                          -0.112545     0.006
+33939   -17.75    &lt;1e-69
+word_number_z                                           -0.0059448    0.001
+40241    -4.24    &lt;1e-04
+length_z                                                 0.0127611    0.002
+66529     4.79    &lt;1e-05
+prev_length_z                                            0.0278212    0.003
+15788     8.81    &lt;1e-17
+education: Trade school                                 -0.097863     0.031
+2184     -3.13    0.0017
+education: Undergraduate                                -0.000800227  0.014
+5583     -0.05    0.9562
+education: Grad school                                   0.0112504    0.014
+3109      0.79    0.4318
+BTP_lz &amp; reading_exp_z                                   0.00235148   0.001
+10654     2.13    0.0336
+BTP_lz &amp; age_z                                          -0.00220854   0.001
+10261    -2.00    0.0452
+reading_exp_z &amp; age_z                                    0.00341873   0.019
+8053      0.17    0.8630
+BTP_lz &amp; position: noun                                  0.00049131   0.001
+39696     0.35    0.7251
+BTP_lz &amp; position: spillover_1                          -0.00311567   0.001
+39104    -2.24    0.0251
+reading_exp_z &amp; position: noun                          -0.0100223    0.001
+8736     -5.35    &lt;1e-07
+reading_exp_z &amp; position: spillover_1                    0.00356564   0.001
+58053     2.26    0.0241
+age_z &amp; position: noun                                   0.00452192   0.001
+87701     2.41    0.0160
+age_z &amp; position: spillover_1                           -0.000993882  0.001
+58455    -0.63    0.5305
+BTP_lz &amp; reading_exp_z &amp; age_z                           0.000713095  0.000
+922463    0.77    0.4395
+BTP_lz &amp; reading_exp_z &amp; position: noun                  0.00232448   0.001
+4958      1.55    0.1202
+BTP_lz &amp; reading_exp_z &amp; position: spillover_1          -0.00101906   0.001
+48947    -0.68    0.4939
+BTP_lz &amp; age_z &amp; position: noun                          0.000218552  0.001
+4981      0.15    0.8840
+BTP_lz &amp; age_z &amp; position: spillover_1                  -0.000716448  0.001
+49215    -0.48    0.6311
+reading_exp_z &amp; age_z &amp; position: noun                  -0.000619455  0.001
+56993    -0.39    0.6932
+reading_exp_z &amp; age_z &amp; position: spillover_1           -0.00138999   0.001
+32429    -1.05    0.2939
+BTP_lz &amp; reading_exp_z &amp; age_z &amp; position: noun          0.00130911   0.001
+25181     1.05    0.2957
+BTP_lz &amp; reading_exp_z &amp; age_z &amp; position: spillover_1   0.000874615  0.001
+24768     0.70    0.4833
 ───────────────────────────────────────────────────────────────────────────
-──────
+────────────────────────
 </pre>
 
 
@@ -1028,41 +1042,58 @@ position: spillover_1 &amp; reading_exp_z   0.00346723   0.00154518    2.24
 
 
 <pre class='hljl'>
-<span class='hljl-n'>region_ftp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>region_ftp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>);</span><span class='hljl-t'> </span><span class='hljl-cs'>#tuple that wraps the fitted model and the dataframe</span><span class='hljl-t'>
+<span class='hljl-n'>region_ftp_r</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>region_ftp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>);</span><span class='hljl-t'> </span><span class='hljl-cs'>#tuple that wraps the fitted model and the dataframe</span><span class='hljl-t'>
 </span><span class='hljl-nd'>@rput</span><span class='hljl-t'> </span><span class='hljl-n'>region_ftp</span><span class='hljl-p'>;</span><span class='hljl-t'>
 
-</span><span class='hljl-n'>region_btp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>region_btp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>);</span><span class='hljl-t'> </span><span class='hljl-cs'>#tuple that wraps the fitted model and the dataframe</span><span class='hljl-t'>
+</span><span class='hljl-n'>region_btp_r</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>region_btp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>);</span><span class='hljl-t'> </span><span class='hljl-cs'>#tuple that wraps the fitted model and the dataframe</span><span class='hljl-t'>
 </span><span class='hljl-nd'>@rput</span><span class='hljl-t'> </span><span class='hljl-n'>region_btp</span><span class='hljl-p'>;</span><span class='hljl-t'>
 
+</span><span class='hljl-so'>R&quot;summary(spr_critregion$age)&quot;</span><span class='hljl-t'>
+
 </span><span class='hljl-so'>R&quot;&quot;&quot;
-plot(ggpredict(region_ftp, terms = c(&quot;FTP_lz&quot;, &quot;position&quot;)), facet = T, colors = &quot;viridis&quot;)
+spr_critregion %&gt;%
+  filter(age %in% c(18, 31, 54, 76)) %&gt;%
+  distinct(age, age_z) %&gt;%
+  arrange(age)
 &quot;&quot;&quot;</span><span class='hljl-t'>
 
 </span><span class='hljl-so'>R&quot;&quot;&quot;
-plot(ggpredict(region_ftp, terms = c(&quot;FTP_lz&quot;, &quot;age_z [quart]&quot;)), colors = &quot;viridis&quot;)
+ftp_region &lt;- plot(ggpredict(region_ftp_r, terms = c(&quot;FTP_lz&quot;, &quot;position&quot;)), facet = T, colors = &quot;viridis&quot;)
+
+ggsave(&quot;fig/Figure8_int_ftp_pos.jpg&quot;, ftp_region, height = 4, width = 7, units = &quot;in&quot;)
 &quot;&quot;&quot;</span><span class='hljl-t'>
 
 </span><span class='hljl-so'>R&quot;&quot;&quot;
-plot(ggpredict(region_ftp, terms = c(&quot;FTP_lz&quot;, &quot;reading_exp_z [quart]&quot;)), colors = &quot;viridis&quot;)
+int_age &lt;- plot(ggpredict(region_ftp_r, terms = c(&quot;FTP_lz&quot;, &quot;age_z [-1.4285578, -0.3035959, 1.6867213, 3.5905030]&quot;)), colors = &quot;viridis&quot;) + scale_fill_viridis(name = &quot;age&quot;, discrete = TRUE, labels = c(&quot;18&quot;, &quot;31&quot;, &quot;54&quot;, &quot;76&quot;)) + scale_color_viridis(name = &quot;age&quot;, discrete = TRUE, labels = c(&quot;18&quot;, &quot;31&quot;, &quot;54&quot;, &quot;76&quot;))
+
+ggsave(&quot;fig/Figure9_int_ftp_age.jpg&quot;, int_age, height = 7, width = 7, units = &quot;in&quot;)
 &quot;&quot;&quot;</span><span class='hljl-t'>
 
 </span><span class='hljl-so'>R&quot;&quot;&quot;
-plot(ggpredict(region_btp, terms = c(&quot;BTP_lz&quot;, &quot;position&quot;)), facet = T, colors = &quot;viridis&quot;)
+ftp_read &lt;- plot(ggpredict(region_ftp_r, terms = c(&quot;FTP_lz&quot;, &quot;reading_exp_z [quart]&quot;)), colors = &quot;viridis&quot;)
+
+ggsave(&quot;fig/Figure10_int_ftp_read.jpg&quot;, ftp_read, height = 7, width = 7, units = &quot;in&quot;)
 &quot;&quot;&quot;</span><span class='hljl-t'>
 
 </span><span class='hljl-so'>R&quot;&quot;&quot;
-plot(ggpredict(region_btp, terms = c(&quot;BTP_lz&quot;, &quot;age_z [quart]&quot;)), colors = &quot;viridis&quot;)
+btp_position &lt;- plot(ggpredict(region_btp_r, terms = c(&quot;BTP_lz&quot;, &quot;position&quot;)), facet = T, colors = &quot;viridis&quot;)
+
+ggsave(&quot;fig/Figure11_int_btp_pos.jpg&quot;, btp_position, height = 4, width = 7, units = &quot;in&quot;)
 &quot;&quot;&quot;</span><span class='hljl-t'>
 
 </span><span class='hljl-so'>R&quot;&quot;&quot;
-plot(ggpredict(region_btp, terms = c(&quot;BTP_lz&quot;, &quot;reading_exp_z [quart]&quot;)), colors = &quot;viridis&quot;)
+btp_age &lt;- plot(ggpredict(region_btp_r, terms = c(&quot;BTP_lz&quot;, &quot;age_z [-1.4285578, -0.3035959, 1.6867213, 3.5905030]&quot;)), colors = &quot;viridis&quot;) + scale_fill_viridis(name = &quot;age&quot;, discrete = TRUE, labels = c(&quot;18&quot;, &quot;31&quot;, &quot;54&quot;, &quot;76&quot;)) + scale_color_viridis(name = &quot;age&quot;, discrete = TRUE, labels = c(&quot;18&quot;, &quot;31&quot;, &quot;54&quot;, &quot;76&quot;))
+
+ggsave(&quot;fig/Figure12_int_btp_age.jpg&quot;, btp_age, height = 7, width = 7, units = &quot;in&quot;)
+&quot;&quot;&quot;</span><span class='hljl-t'>
+
+</span><span class='hljl-so'>R&quot;&quot;&quot;
+btp_read &lt;- plot(ggpredict(region_btp_r, terms = c(&quot;BTP_lz&quot;, &quot;reading_exp_z [quart]&quot;)), colors = &quot;viridis&quot;)
+
+ggsave(&quot;fig/Figure13_int_btp_read.jpg.jpg&quot;, btp_read, height = 7, width = 7, units = &quot;in&quot;)
 &quot;&quot;&quot;</span>
 </pre>
 
-
-<pre class="output">
-RObject&#123;VecSxp&#125;
-</pre>
 
 
 <h2>Model diagnostics</h2>
@@ -1071,26 +1102,471 @@ RObject&#123;VecSxp&#125;
 <pre class='hljl'>
 <span class='hljl-so'>R&quot;&quot;&quot;
 library(performance)
-check_model(region_btp)
+check_model(region_btp_r)
 &quot;&quot;&quot;</span><span class='hljl-t'>
 
 </span><span class='hljl-so'>R&quot;&quot;&quot;
-check_model(region_ftp)
+check_model(region_ftp_r)
 &quot;&quot;&quot;</span>
 </pre>
 
 
-<pre class="output">
-RObject&#123;VecSxp&#125;
+
+<h2>Post-hoc LMM: Nationality</h2>
+<p>To assure that nationality is not a source of significant interparticipant difference, in particular that the FTP and BTP scores are are not processed in a significantly different way by US and British nationals, we conducted the following post-hoc LMM on 37 matched participants. </p>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>formula_btp_nation</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>BTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>BTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>origin</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
+
+</span><span class='hljl-n'>formula_ftp_nation</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>FTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'>  </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>FTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>origin</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_length_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
+
+</span><span class='hljl-n'>ftp_nation</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>fit</span><span class='hljl-p'>(</span><span class='hljl-n'>MixedModel</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>formula_ftp_nation</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>contrasts</span><span class='hljl-oB'>=</span><span class='hljl-n'>cntrsts</span><span class='hljl-p'>);</span><span class='hljl-t'>
+</span><span class='hljl-n'>btp_nation</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>fit</span><span class='hljl-p'>(</span><span class='hljl-n'>MixedModel</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>formula_btp_nation</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>contrasts</span><span class='hljl-oB'>=</span><span class='hljl-n'>cntrsts</span><span class='hljl-p'>);</span><span class='hljl-t'>
+
+</span><span class='hljl-nf'>show</span><span class='hljl-p'>(</span><span class='hljl-n'>ftp_nation</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>show</span><span class='hljl-p'>(</span><span class='hljl-n'>btp_nation</span><span class='hljl-p'>)</span>
 </pre>
 
+
+<pre class="output">
+Linear mixed model fit by maximum likelihood
+ logRT ~ 1 &#43; FTP_lz &#43; reading_exp_z &#43; age_z &#43; position &#43; trial_number_z &#43; w
+ord_number_z &#43; length_z &#43; prev_length_z &#43; education &#43; origin &#43; FTP_lz &amp; rea
+ding_exp_z &#43; FTP_lz &amp; age_z &#43; reading_exp_z &amp; age_z &#43; FTP_lz &amp; position &#43; r
+eading_exp_z &amp; position &#43; age_z &amp; position &#43; FTP_lz &amp; origin &#43; FTP_lz &amp; rea
+ding_exp_z &amp; age_z &#43; FTP_lz &amp; reading_exp_z &amp; position &#43; FTP_lz &amp; age_z &amp; p
+osition &#43; reading_exp_z &amp; age_z &amp; position &#43; FTP_lz &amp; reading_exp_z &amp; age_z
+ &amp; position &#43; &#40;1 &#43; trial_number_z &#43; length_z &#43; prev_length_z | id&#41; &#43; &#40;1 &#43; t
+rial_number_z | w1&#41; &#43; &#40;1 &#43; trial_number_z | w2&#41;
+   logLik   -2 logLik     AIC       AICc        BIC    
+ -2001.1555  4002.3110  4102.3110  4102.3803  4562.6921
+
+Variance components:
+             Column      Variance   Std.Dev.    Corr.
+id       &#40;Intercept&#41;     0.07196825 0.26826900
+         trial_number_z  0.00369385 0.06077704 -0.25
+         length_z        0.00053741 0.02318211 &#43;0.65 -0.02
+         prev_length_z   0.00077395 0.02782004 &#43;0.50 &#43;0.10 &#43;0.53
+w2       &#40;Intercept&#41;     0.00018959 0.01376920
+         trial_number_z  0.00008589 0.00926756 -0.42
+w1       &#40;Intercept&#41;     0.00039946 0.01998659
+         trial_number_z  0.00006778 0.00823315 &#43;0.08
+Residual                 0.06033666 0.24563521
+ Number of obs: 73690; levels of grouping factors: 97, 143, 135
+
+  Fixed-effects parameters:
+───────────────────────────────────────────────────────────────────────────
+───────────────────────
+                                                               Coef.  Std. 
+Error       z  Pr&#40;&gt;|z|&#41;
+───────────────────────────────────────────────────────────────────────────
+───────────────────────
+&#40;Intercept&#41;                                              5.69908      0.039
+1357   145.62    &lt;1e-99
+FTP_lz                                                  -0.00214849   0.002
+2762    -0.94    0.3452
+reading_exp_z                                           -0.0348007    0.025
+2914    -1.38    0.1688
+age_z                                                    0.100135     0.024
+1385     4.15    &lt;1e-04
+position: noun                                          -0.00795231   0.002
+09096   -3.80    0.0001
+position: spillover_1                                    0.015796     0.001
+50569   10.49    &lt;1e-25
+trial_number_z                                          -0.112474     0.006
+32851  -17.77    &lt;1e-69
+word_number_z                                           -0.0060382    0.001
+41214   -4.28    &lt;1e-04
+length_z                                                 0.0122728    0.002
+65614    4.62    &lt;1e-05
+prev_length_z                                            0.0266212    0.003
+14616    8.46    &lt;1e-16
+education: Trade school                                 -0.101343     0.031
+919     -3.18    0.0015
+education: Undergraduate                                -0.000337236  0.014
+5496    -0.02    0.9815
+education: Grad school                                   0.0118801    0.014
+3887     0.83    0.4090
+origin: UK                                               0.0207997    0.044
+3715     0.47    0.6392
+FTP_lz &amp; reading_exp_z                                   0.00184332   0.001
+23235    1.50    0.1347
+FTP_lz &amp; age_z                                          -0.00269537   0.001
+17511   -2.29    0.0218
+reading_exp_z &amp; age_z                                    0.00114148   0.019
+8196     0.06    0.9541
+FTP_lz &amp; position: noun                                  0.00593906   0.001
+37055    4.33    &lt;1e-04
+FTP_lz &amp; position: spillover_1                          -0.00084657   0.001
+36424   -0.62    0.5349
+reading_exp_z &amp; position: noun                          -0.010201     0.001
+87095   -5.45    &lt;1e-07
+reading_exp_z &amp; position: spillover_1                    0.00379842   0.001
+57716    2.41    0.0160
+age_z &amp; position: noun                                   0.00482949   0.001
+87409    2.58    0.0100
+age_z &amp; position: spillover_1                           -0.00107171   0.001
+58111   -0.68    0.4979
+FTP_lz &amp; origin: UK                                     -0.000925886  0.002
+21982   -0.42    0.6766
+FTP_lz &amp; reading_exp_z &amp; age_z                           0.00123999   0.000
+97218    1.28    0.2021
+FTP_lz &amp; reading_exp_z &amp; position: noun                  0.000766853  0.001
+4762     0.52    0.6034
+FTP_lz &amp; reading_exp_z &amp; position: spillover_1           0.000237999  0.001
+47038    0.16    0.8714
+FTP_lz &amp; age_z &amp; position: noun                          0.000694137  0.001
+47858    0.47    0.6387
+FTP_lz &amp; age_z &amp; position: spillover_1                  -0.000809317  0.001
+47308   -0.55    0.5827
+reading_exp_z &amp; age_z &amp; position: noun                  -0.000783149  0.001
+56729   -0.50    0.6173
+reading_exp_z &amp; age_z &amp; position: spillover_1           -0.00129891   0.001
+32132   -0.98    0.3256
+FTP_lz &amp; reading_exp_z &amp; age_z &amp; position: noun          0.000282829  0.001
+23602    0.23    0.8190
+FTP_lz &amp; reading_exp_z &amp; age_z &amp; position: spillover_1   0.000378706  0.001
+23117    0.31    0.7584
+───────────────────────────────────────────────────────────────────────────
+───────────────────────Linear mixed model fit by maximum likelihood
+ logRT ~ 1 &#43; BTP_lz &#43; reading_exp_z &#43; age_z &#43; position &#43; trial_number_z &#43; w
+ord_number_z &#43; length_z &#43; prev_length_z &#43; education &#43; origin &#43; BTP_lz &amp; rea
+ding_exp_z &#43; BTP_lz &amp; age_z &#43; reading_exp_z &amp; age_z &#43; BTP_lz &amp; position &#43; r
+eading_exp_z &amp; position &#43; age_z &amp; position &#43; BTP_lz &amp; origin &#43; BTP_lz &amp; rea
+ding_exp_z &amp; age_z &#43; BTP_lz &amp; reading_exp_z &amp; position &#43; BTP_lz &amp; age_z &amp; p
+osition &#43; reading_exp_z &amp; age_z &amp; position &#43; BTP_lz &amp; reading_exp_z &amp; age_z
+ &amp; position &#43; &#40;1 &#43; trial_number_z &#43; length_z &#43; prev_length_z | id&#41; &#43; &#40;1 &#43; t
+rial_number_z | w1&#41; &#43; &#40;1 &#43; trial_number_z | w2&#41;
+   logLik   -2 logLik     AIC       AICc        BIC    
+ -2006.0543  4012.1086  4112.1086  4112.1778  4572.4897
+
+Variance components:
+             Column      Variance   Std.Dev.    Corr.
+id       &#40;Intercept&#41;     0.07199720 0.26832294
+         trial_number_z  0.00370664 0.06088222 -0.24
+         length_z        0.00054003 0.02323864 &#43;0.65 -0.02
+         prev_length_z   0.00077388 0.02781868 &#43;0.50 &#43;0.10 &#43;0.52
+w2       &#40;Intercept&#41;     0.00020897 0.01445587
+         trial_number_z  0.00008658 0.00930489 -0.36
+w1       &#40;Intercept&#41;     0.00034533 0.01858312
+         trial_number_z  0.00006796 0.00824407 &#43;0.06
+Residual                 0.06034813 0.24565856
+ Number of obs: 73690; levels of grouping factors: 97, 143, 135
+
+  Fixed-effects parameters:
+───────────────────────────────────────────────────────────────────────────
+────────────────────────
+                                                               Coef.   Std.
+ Error       z  Pr&#40;&gt;|z|&#41;
+───────────────────────────────────────────────────────────────────────────
+────────────────────────
+&#40;Intercept&#41;                                              5.69822      0.039
+1576    145.52    &lt;1e-99
+BTP_lz                                                  -0.00529536   0.002
+19302    -2.41    0.0158
+reading_exp_z                                           -0.0332675    0.025
+3202     -1.31    0.1889
+age_z                                                    0.0978988    0.024
+1663      4.05    &lt;1e-04
+position: noun                                          -0.00906925   0.002
+09527    -4.33    &lt;1e-04
+position: spillover_1                                    0.0157606    0.001
+51116    10.43    &lt;1e-24
+trial_number_z                                          -0.112547     0.006
+33921   -17.75    &lt;1e-69
+word_number_z                                           -0.00594429   0.001
+40241    -4.24    &lt;1e-04
+length_z                                                 0.0127611    0.002
+6652      4.79    &lt;1e-05
+prev_length_z                                            0.0278212    0.003
+15784     8.81    &lt;1e-17
+education: Trade school                                 -0.101223     0.031
+9475     -3.17    0.0015
+education: Undergraduate                                -0.000383034  0.014
+5625     -0.03    0.9790
+education: Grad school                                   0.0120294    0.014
+4015      0.84    0.4036
+origin: UK                                               0.021044     0.044
+4203      0.47    0.6357
+BTP_lz &amp; reading_exp_z                                   0.00230507   0.001
+1775      1.96    0.0503
+BTP_lz &amp; age_z                                          -0.00218556   0.001
+1199     -1.95    0.0510
+reading_exp_z &amp; age_z                                    0.00261717   0.019
+8458      0.13    0.8951
+BTP_lz &amp; position: noun                                  0.000491553  0.001
+39696     0.35    0.7249
+BTP_lz &amp; position: spillover_1                          -0.00311578   0.001
+39104    -2.24    0.0251
+reading_exp_z &amp; position: noun                          -0.0100228    0.001
+8736     -5.35    &lt;1e-07
+reading_exp_z &amp; position: spillover_1                    0.00356593   0.001
+58053     2.26    0.0241
+age_z &amp; position: noun                                   0.00452212   0.001
+87701     2.41    0.0160
+age_z &amp; position: spillover_1                           -0.000993937  0.001
+58455    -0.63    0.5305
+BTP_lz &amp; origin: UK                                      0.000237397  0.002
+11194     0.11    0.9105
+BTP_lz &amp; reading_exp_z &amp; age_z                           0.000704907  0.000
+924948    0.76    0.4460
+BTP_lz &amp; reading_exp_z &amp; position: noun                  0.00232471   0.001
+4958      1.55    0.1201
+BTP_lz &amp; reading_exp_z &amp; position: spillover_1          -0.00101919   0.001
+48947    -0.68    0.4938
+BTP_lz &amp; age_z &amp; position: noun                          0.000218411  0.001
+4981      0.15    0.8841
+BTP_lz &amp; age_z &amp; position: spillover_1                  -0.000716284  0.001
+49215    -0.48    0.6312
+reading_exp_z &amp; age_z &amp; position: noun                  -0.000619824  0.001
+56992    -0.39    0.6930
+reading_exp_z &amp; age_z &amp; position: spillover_1           -0.00138997   0.001
+32429    -1.05    0.2939
+BTP_lz &amp; reading_exp_z &amp; age_z &amp; position: noun          0.00130902   0.001
+25181     1.05    0.2957
+BTP_lz &amp; reading_exp_z &amp; age_z &amp; position: spillover_1   0.000874551  0.001
+24768     0.70    0.4833
+───────────────────────────────────────────────────────────────────────────
+────────────────────────
+</pre>
+
+
+<h2>Post-hoc LMM: Freq v. word length</h2>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>formula_btp_f</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>BTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>freq_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_freq_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>freq_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_freq_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
+
+</span><span class='hljl-n'>formula_ftp_f</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nd'>@formula</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>logRT</span><span class='hljl-t'>  </span><span class='hljl-oB'>~</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>FTP_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>reading_exp_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>age_z</span><span class='hljl-t'> </span><span class='hljl-oB'>*</span><span class='hljl-t'> </span><span class='hljl-n'>position</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>word_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>freq_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_freq_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>education</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>freq_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>prev_freq_lz</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>id</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> 
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w1</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'>
+               </span><span class='hljl-p'>(</span><span class='hljl-ni'>1</span><span class='hljl-t'> </span><span class='hljl-oB'>+</span><span class='hljl-t'> </span><span class='hljl-n'>trial_number_z</span><span class='hljl-t'> </span><span class='hljl-oB'>|</span><span class='hljl-t'> </span><span class='hljl-n'>w2</span><span class='hljl-p'>));</span><span class='hljl-t'>
+
+</span><span class='hljl-n'>ftp_freq</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>fit</span><span class='hljl-p'>(</span><span class='hljl-n'>MixedModel</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>formula_ftp_f</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>contrasts</span><span class='hljl-oB'>=</span><span class='hljl-n'>cntrsts</span><span class='hljl-p'>);</span><span class='hljl-t'>
+</span><span class='hljl-n'>btp_freq</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>fit</span><span class='hljl-p'>(</span><span class='hljl-n'>MixedModel</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>formula_btp_f</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>contrasts</span><span class='hljl-oB'>=</span><span class='hljl-n'>cntrsts</span><span class='hljl-p'>);</span><span class='hljl-t'>
+
+</span><span class='hljl-nf'>show</span><span class='hljl-p'>(</span><span class='hljl-n'>ftp_freq</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>show</span><span class='hljl-p'>(</span><span class='hljl-n'>btp_freq</span><span class='hljl-p'>)</span><span class='hljl-t'>
+
+
+</span><span class='hljl-n'>mods</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-n'>region_ftp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ftp_freq</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>region_btp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>btp_freq</span><span class='hljl-p'>];</span><span class='hljl-t'>
+</span><span class='hljl-n'>gof_summary</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>DataFrame</span><span class='hljl-p'>(</span><span class='hljl-n'>name</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-sc'>:region_ftp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-sc'>:ftp_freq</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-sc'>:region_btp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-sc'>:btp_freq</span><span class='hljl-p'>],</span><span class='hljl-t'> </span><span class='hljl-n'>dof</span><span class='hljl-oB'>=</span><span class='hljl-n'>dof</span><span class='hljl-oB'>.</span><span class='hljl-p'>(</span><span class='hljl-n'>mods</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>deviance</span><span class='hljl-oB'>=</span><span class='hljl-n'>deviance</span><span class='hljl-oB'>.</span><span class='hljl-p'>(</span><span class='hljl-n'>mods</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>AIC</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>aic</span><span class='hljl-oB'>.</span><span class='hljl-p'>(</span><span class='hljl-n'>mods</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>AICc</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>aicc</span><span class='hljl-oB'>.</span><span class='hljl-p'>(</span><span class='hljl-n'>mods</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>BIC</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>bic</span><span class='hljl-oB'>.</span><span class='hljl-p'>(</span><span class='hljl-n'>mods</span><span class='hljl-p'>))</span>
+</pre>
+
+
+<pre class="output">
+Linear mixed model fit by maximum likelihood
+ logRT ~ 1 &#43; FTP_lz &#43; reading_exp_z &#43; age_z &#43; position &#43; trial_number_z &#43; w
+ord_number_z &#43; freq_lz &#43; prev_freq_lz &#43; education &#43; FTP_lz &amp; reading_exp_z 
+&#43; FTP_lz &amp; age_z &#43; reading_exp_z &amp; age_z &#43; FTP_lz &amp; position &#43; reading_exp_
+z &amp; position &#43; age_z &amp; position &#43; FTP_lz &amp; reading_exp_z &amp; age_z &#43; FTP_lz &amp;
+ reading_exp_z &amp; position &#43; FTP_lz &amp; age_z &amp; position &#43; reading_exp_z &amp; age
+_z &amp; position &#43; FTP_lz &amp; reading_exp_z &amp; age_z &amp; position &#43; &#40;1 &#43; trial_numb
+er_z &#43; freq_lz &#43; prev_freq_lz | id&#41; &#43; &#40;1 &#43; trial_number_z | w1&#41; &#43; &#40;1 &#43; tria
+l_number_z | w2&#41;
+   logLik   -2 logLik     AIC       AICc        BIC    
+ -2500.3651  5000.7302  5096.7302  5096.7941  5538.6961
+
+Variance components:
+             Column      Variance   Std.Dev.    Corr.
+id       &#40;Intercept&#41;     0.07340671 0.27093672
+         trial_number_z  0.00368262 0.06068462 -0.26
+         freq_lz         0.00018845 0.01372756 -0.73 -0.07
+         prev_freq_lz    0.00040437 0.02010903 -0.62 -0.10 &#43;0.92
+w2       &#40;Intercept&#41;     0.00035556 0.01885635
+         trial_number_z  0.00007559 0.00869436 -0.50
+w1       &#40;Intercept&#41;     0.00056691 0.02380989
+         trial_number_z  0.00006943 0.00833267 &#43;0.08
+Residual                 0.06125212 0.24749166
+ Number of obs: 73690; levels of grouping factors: 97, 143, 135
+
+  Fixed-effects parameters:
+───────────────────────────────────────────────────────────────────────────
+────────────────────────
+                                                               Coef.   Std.
+ Error       z  Pr&#40;&gt;|z|&#41;
+───────────────────────────────────────────────────────────────────────────
+────────────────────────
+&#40;Intercept&#41;                                              5.71058      0.029
+4732    193.75    &lt;1e-99
+FTP_lz                                                  -0.0028292    0.002
+06798    -1.37    0.1713
+reading_exp_z                                            0.00177839   0.023
+1483      0.08    0.9388
+age_z                                                    0.0823875    0.023
+2158      3.55    0.0004
+position: noun                                           0.00911161   0.001
+76196     5.17    &lt;1e-06
+position: spillover_1                                    0.0168232    0.001
+38444    12.15    &lt;1e-33
+trial_number_z                                          -0.112371     0.006
+31521   -17.79    &lt;1e-70
+word_number_z                                           -0.00599388   0.001
+46626    -4.09    &lt;1e-04
+freq_lz                                                 -0.00575731   0.001
+75821    -3.27    0.0011
+prev_freq_lz                                            -0.0110056    0.002
+34095    -4.70    &lt;1e-05
+education: Trade school                                 -0.0761927    0.030
+8396     -2.47    0.0135
+education: Undergraduate                                -2.89183e-5   0.014
+381      -0.00    0.9984
+education: Grad school                                   0.00375724   0.014
+1398      0.27    0.7905
+FTP_lz &amp; reading_exp_z                                   0.00180808   0.001
+16528     1.55    0.1208
+FTP_lz &amp; age_z                                          -0.00288368   0.001
+16429    -2.48    0.0133
+reading_exp_z &amp; age_z                                   -0.00844472   0.019
+4878     -0.43    0.6648
+FTP_lz &amp; position: noun                                  0.0064308    0.001
+3849      4.64    &lt;1e-05
+FTP_lz &amp; position: spillover_1                          -0.000296337  0.001
+37938    -0.21    0.8299
+reading_exp_z &amp; position: noun                          -0.00691977   0.001
+64767    -4.20    &lt;1e-04
+reading_exp_z &amp; position: spillover_1                    0.00491964   0.001
+48417     3.31    0.0009
+age_z &amp; position: noun                                   0.00345072   0.001
+65067     2.09    0.0366
+age_z &amp; position: spillover_1                           -0.00303587   0.001
+4874     -2.04    0.0412
+FTP_lz &amp; reading_exp_z &amp; age_z                           0.00126636   0.000
+975515    1.30    0.1942
+FTP_lz &amp; reading_exp_z &amp; position: noun                  0.00119554   0.001
+48885     0.80    0.4220
+FTP_lz &amp; reading_exp_z &amp; position: spillover_1          -4.55743e-5   0.001
+48321    -0.03    0.9755
+FTP_lz &amp; age_z &amp; position: noun                          0.000388265  0.001
+49119     0.26    0.7946
+FTP_lz &amp; age_z &amp; position: spillover_1                  -0.0006702    0.001
+48586    -0.45    0.6520
+reading_exp_z &amp; age_z &amp; position: noun                  -0.00183287   0.001
+37986    -1.33    0.1841
+reading_exp_z &amp; age_z &amp; position: spillover_1           -0.000793173  0.001
+24292    -0.64    0.5234
+FTP_lz &amp; reading_exp_z &amp; age_z &amp; position: noun          0.000286617  0.001
+24662     0.23    0.8182
+FTP_lz &amp; reading_exp_z &amp; age_z &amp; position: spillover_1   0.000341353  0.001
+24186     0.27    0.7834
+───────────────────────────────────────────────────────────────────────────
+────────────────────────Linear mixed model fit by maximum likelihood
+ logRT ~ 1 &#43; BTP_lz &#43; reading_exp_z &#43; age_z &#43; position &#43; trial_number_z &#43; w
+ord_number_z &#43; freq_lz &#43; prev_freq_lz &#43; education &#43; BTP_lz &amp; reading_exp_z 
+&#43; BTP_lz &amp; age_z &#43; reading_exp_z &amp; age_z &#43; BTP_lz &amp; position &#43; reading_exp_
+z &amp; position &#43; age_z &amp; position &#43; BTP_lz &amp; reading_exp_z &amp; age_z &#43; BTP_lz &amp;
+ reading_exp_z &amp; position &#43; BTP_lz &amp; age_z &amp; position &#43; reading_exp_z &amp; age
+_z &amp; position &#43; BTP_lz &amp; reading_exp_z &amp; age_z &amp; position &#43; &#40;1 &#43; trial_numb
+er_z &#43; freq_lz &#43; prev_freq_lz | id&#41; &#43; &#40;1 &#43; trial_number_z | w1&#41; &#43; &#40;1 &#43; tria
+l_number_z | w2&#41;
+   logLik   -2 logLik     AIC       AICc        BIC    
+ -2513.8179  5027.6358  5123.6358  5123.6997  5565.6017
+
+Variance components:
+             Column      Variance   Std.Dev.    Corr.
+id       &#40;Intercept&#41;     0.07347577 0.27106414
+         trial_number_z  0.00368742 0.06072411 -0.25
+         freq_lz         0.00018865 0.01373499 -0.73 -0.07
+         prev_freq_lz    0.00040229 0.02005710 -0.62 -0.10 &#43;0.92
+w2       &#40;Intercept&#41;     0.00038746 0.01968391
+         trial_number_z  0.00007607 0.00872197 -0.46
+w1       &#40;Intercept&#41;     0.00051703 0.02273824
+         trial_number_z  0.00006963 0.00834435 &#43;0.05
+Residual                 0.06127595 0.24753980
+ Number of obs: 73690; levels of grouping factors: 97, 143, 135
+
+  Fixed-effects parameters:
+───────────────────────────────────────────────────────────────────────────
+────────────────────────
+                                                               Coef.   Std.
+ Error       z  Pr&#40;&gt;|z|&#41;
+───────────────────────────────────────────────────────────────────────────
+────────────────────────
+&#40;Intercept&#41;                                              5.7103       0.029
+4869    193.66    &lt;1e-99
+BTP_lz                                                  -0.00398053   0.002
+04759    -1.94    0.0519
+reading_exp_z                                            0.00223829   0.023
+175       0.10    0.9231
+age_z                                                    0.0810444    0.023
+2418      3.49    0.0005
+position: noun                                           0.00889808   0.001
+76212     5.05    &lt;1e-06
+position: spillover_1                                    0.0168154    0.001
+38481    12.14    &lt;1e-33
+trial_number_z                                          -0.112434     0.006
+31936   -17.79    &lt;1e-70
+word_number_z                                           -0.00588984   0.001
+46253    -4.03    &lt;1e-04
+freq_lz                                                 -0.0058491    0.001
+75975    -3.32    0.0009
+prev_freq_lz                                            -0.0114336    0.002
+3398     -4.89    &lt;1e-05
+education: Trade school                                 -0.0760323    0.030
+874      -2.46    0.0138
+education: Undergraduate                                -7.16717e-5   0.014
+397      -0.00    0.9960
+education: Grad school                                   0.00387603   0.014
+1555      0.27    0.7842
+BTP_lz &amp; reading_exp_z                                   0.00234776   0.001
+11171     2.11    0.0347
+BTP_lz &amp; age_z                                          -0.00212976   0.001
+10738    -1.92    0.0545
+reading_exp_z &amp; age_z                                   -0.00780695   0.019
+5113     -0.40    0.6891
+BTP_lz &amp; position: noun                                 -0.000983851  0.001
+3924     -0.71    0.4798
+BTP_lz &amp; position: spillover_1                          -0.000237842  0.001
+38603    -0.17    0.8638
+reading_exp_z &amp; position: noun                          -0.0069609    0.001
+64837    -4.22    &lt;1e-04
+reading_exp_z &amp; position: spillover_1                    0.00491041   0.001
+48435     3.31    0.0009
+age_z &amp; position: noun                                   0.00338679   0.001
+65125     2.05    0.0403
+age_z &amp; position: spillover_1                           -0.0030414    0.001
+48759    -2.04    0.0409
+BTP_lz &amp; reading_exp_z &amp; age_z                           0.000573982  0.000
+926417    0.62    0.5355
+BTP_lz &amp; reading_exp_z &amp; position: noun                  0.00131404   0.001
+49012     0.88    0.3779
+BTP_lz &amp; reading_exp_z &amp; position: spillover_1          -8.91042e-5   0.001
+48719    -0.06    0.9522
+BTP_lz &amp; age_z &amp; position: noun                          0.0012842    0.001
+49288     0.86    0.3897
+BTP_lz &amp; age_z &amp; position: spillover_1                  -0.00169615   0.001
+49002    -1.14    0.2550
+reading_exp_z &amp; age_z &amp; position: noun                  -0.00184835   0.001
+38028    -1.34    0.1805
+reading_exp_z &amp; age_z &amp; position: spillover_1           -0.000793854  0.001
+24309    -0.64    0.5231
+BTP_lz &amp; reading_exp_z &amp; age_z &amp; position: noun          0.00112482   0.001
+247       0.90    0.3670
+BTP_lz &amp; reading_exp_z &amp; age_z &amp; position: spillover_1   0.000934981  0.001
+24571     0.75    0.4529
+───────────────────────────────────────────────────────────────────────────
+────────────────────────
+</pre>
+
+
+<div class="data-frame"><p>4 rows × 6 columns</p><table class="data-frame"><thead><tr><th></th><th>name</th><th>dof</th><th>deviance</th><th>AIC</th><th>AICc</th><th>BIC</th></tr><tr><th></th><th title="Symbol">Symbol</th><th title="Int64">Int64</th><th title="Float64">Float64</th><th title="Float64">Float64</th><th title="Float64">Float64</th><th title="Float64">Float64</th></tr></thead><tbody><tr><th>1</th><td>region_ftp</td><td>48</td><td>4002.7</td><td>4098.7</td><td>4098.77</td><td>4540.67</td></tr><tr><th>2</th><td>ftp_freq</td><td>48</td><td>5000.73</td><td>5096.73</td><td>5096.79</td><td>5538.7</td></tr><tr><th>3</th><td>region_btp</td><td>48</td><td>4012.34</td><td>4108.34</td><td>4108.41</td><td>4550.31</td></tr><tr><th>4</th><td>btp_freq</td><td>48</td><td>5027.64</td><td>5123.64</td><td>5123.7</td><td>5565.6</td></tr></tbody></table></div>
 
 
         <HR/>
         <div class="footer">
           <p>
             Published from <a href="spr_analysis_colloc.jmd">spr_analysis_colloc.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.3 on 2021-04-20.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2021-10-01.
           </p>
         </div>
       </div>

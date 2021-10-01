@@ -3,7 +3,8 @@
 ## Setup
 ```julia results = "hidden"
 using MixedModels
-using CSV, DataFrames, DataFramesMeta
+using CSV, DataFrames, DataFramesMacros
+using StatsBase
 using RCall, JellyMe4 
 using Random
 
@@ -16,6 +17,7 @@ library(car)
 library(corrplot)
 library(ggeffects)
 library(LMERConvenienceFunctions)
+library(viridis)
 """;
 ```
 
@@ -45,14 +47,13 @@ Further: BTP and FTP will interact with age (age_z), reading experience (reading
 Predictors of interest:
 - BTP_lz: log-transformed backward transition probability of words in bigram (z-scored)
 - FTP_lz: log-transformed forward transition probability of words in bigram (z-scored)
-- bigram_freq_lz: log-transformed bigram frequency (z-scored)
 - age_z: age in years (z-scored)
 - reading_exp_z: added score from Words that Go Together task, Author Recognition task and synonym-based vocabulary task, then z-scored
 
 Other covariates:
 - length_z: length of current word (z-scored)
-- prev_length_z: length of previous word (z-scored)
-- trial_number_z: trial number (z-scored)
+- prev\_length\_z: length of previous word (z-scored)
+- trial\_number\_z: trial number (z-scored)
 - education: level of education (4 levels from  high school to graduate degree)
 
 
@@ -67,17 +68,17 @@ Other covariates:
 
 
 ```julia 
-spr_critregion = DataFrame(CSV.read(joinpath(@__DIR__,"data/critregion_exp.txt"), delim="\t", header = 1));
+spr_critregion = CSV.read(joinpath(@__DIR__,"data/critregion_exp.txt"), delim="\t", header = 1, DataFrame);
 ```
 
 ## Correlation between predictors
 
-```julia
+```julia results = "hidden"
 @rput spr_critregion
 
 R"""
 spr_critregion %>% 
-  select(bigram_freq_lz, freq_lz, prev_freq_lz, BTP_lz, FTP_lz, length_z, prev_length_z) %>% 
+  select(bfreq_lz, freq_lz, prev_freq_lz, BTP_lz, FTP_lz, length_z, prev_length_z) %>% 
   cor(method="spearman") %>% 
   corrplot(method="number", type="lower")
 """
@@ -87,7 +88,7 @@ spr_critregion %>%
   distinct(id, .keep_all=TRUE) %>% 
   select(vocab_z, wgt_z, art_z, reading_exp_z, age_z) %>% 
   drop_na() %>% 
-  cor(method = "pearson") %>% 
+  cor(method = "spearman") %>% 
   corrplot(method="number", type="lower")
 """
 ```
@@ -104,6 +105,7 @@ Correlation between experience-based measures (and age) stronger, as would be ex
 cntrsts = merge(
     Dict(:position => EffectsCoding(base="spillover_2"),
          :education => HelmertCoding(levels=["High school", "Trade school", "Undergraduate", "Grad school"]),
+         :origin => DummyCoding(base="USA"),
          :id => Grouping(),
          :w1 => Grouping(),
          :w2 => Grouping())
@@ -113,7 +115,7 @@ cntrsts = merge(
 ## Maximal model critical word
 Partially-crossed random effects on W1 and W2 to distinguish between the different types of control in item design. This should also take care of any differences between pairings, like differences in average bigram frequency, but also control for variability in the quality of synonymy and the lexical characteristics of each word. 
 
-Step 1 - Initial maximal models:
+Step 1 - Initial (essentially) maximal models:
 ```julia results = "hidden"
 formula_maximal_ftp = @formula (logRT  ~ 1 + FTP_lz * reading_exp_z * age_z * position + trial_number_z + word_number_z + length_z + prev_length_z + education +
                (1 + FTP_lz + trial_number_z + word_number_z + length_z + prev_length_z | id) + 
@@ -138,82 +140,132 @@ To avoid introducing differences between W1/W2 random effects and between age/re
 Also removed the TPs from id to allow for the same random effects structure as they were already not very informative, and word_number was also not very informative.
 
 Step 2 - Reduced random effect structure:
-```julia results = "hidden"
-formula_btp1 = @formula (logRT  ~ 1 + BTP_lz * reading_exp_z * age_z * position + trial_number_z + word_number_z + length_z + prev_length_z + education +
-               (1 + trial_number_z + length_z + prev_length_z | id) + 
-               (1 + trial_number_z | w1) +
-               (1 + trial_number_z | w2));
-
-formula_ftp1 = @formula (logRT  ~ 1 + FTP_lz * reading_exp_z * age_z * position + trial_number_z + word_number_z + length_z + prev_length_z + education + 
-               (1 + trial_number_z + length_z + prev_length_z | id) + 
-               (1 + trial_number_z | w1) +
-               (1 + trial_number_z | w2));
-
-#region_ftp = fit(MixedModel, formula_ftp1, spr_critregion, contrasts=cntrsts);
-#region_btp = fit(MixedModel, formula_btp1, spr_critregion, contrasts=cntrsts);
-```
-
-## Final model
-Step 3 - Remove the non-significant three/four-way interactions for final model:
 ```julia
-formula_btp2 = @formula (logRT  ~ 1 + BTP_lz * (reading_exp_z + age_z + position) + position * (age_z + reading_exp_z) + trial_number_z + word_number_z + length_z + prev_length_z + education + 
+formula_btp = @formula (logRT  ~ 1 + BTP_lz * reading_exp_z * age_z * position + trial_number_z + word_number_z + length_z + prev_length_z + education +
                (1 + trial_number_z + length_z + prev_length_z | id) + 
                (1 + trial_number_z | w1) +
                (1 + trial_number_z | w2));
 
-formula_ftp2 = @formula (logRT  ~ 1 + FTP_lz * (reading_exp_z + age_z + position) + position * (age_z + reading_exp_z) + trial_number_z + word_number_z + length_z + prev_length_z + education + 
+formula_ftp = @formula (logRT  ~ 1 + FTP_lz * reading_exp_z * age_z * position + trial_number_z + word_number_z + length_z + prev_length_z + education + 
                (1 + trial_number_z + length_z + prev_length_z | id) + 
                (1 + trial_number_z | w1) +
                (1 + trial_number_z | w2));
 
-region_ftp = fit(MixedModel, formula_ftp2, spr_critregion, contrasts=cntrsts);
-region_btp = fit(MixedModel, formula_btp2, spr_critregion, contrasts=cntrsts);
+region_ftp = fit(MixedModel, formula_ftp, spr_critregion, contrasts=cntrsts);
+region_btp = fit(MixedModel, formula_btp, spr_critregion, contrasts=cntrsts);
 
 show(region_ftp)
 show(region_btp)
 ```
 
 ## Plot interactions using R
-```julia
-region_ftp = (region_ftp, spr_critregion); #tuple that wraps the fitted model and the dataframe
+```julia results = "hidden"
+region_ftp_r = (region_ftp, spr_critregion); #tuple that wraps the fitted model and the dataframe
 @rput region_ftp;
 
-region_btp = (region_btp, spr_critregion); #tuple that wraps the fitted model and the dataframe
+region_btp_r = (region_btp, spr_critregion); #tuple that wraps the fitted model and the dataframe
 @rput region_btp;
 
+R"summary(spr_critregion$age)"
+
 R"""
-plot(ggpredict(region_ftp, terms = c("FTP_lz", "position")), facet = T, colors = "viridis")
+spr_critregion %>%
+  filter(age %in% c(18, 31, 54, 76)) %>%
+  distinct(age, age_z) %>%
+  arrange(age)
 """
 
 R"""
-plot(ggpredict(region_ftp, terms = c("FTP_lz", "age_z [quart]")), colors = "viridis")
+ftp_region <- plot(ggpredict(region_ftp_r, terms = c("FTP_lz", "position")), facet = T, colors = "viridis")
+
+ggsave("fig/Figure8_int_ftp_pos.jpg", ftp_region, height = 4, width = 7, units = "in")
 """
 
 R"""
-plot(ggpredict(region_ftp, terms = c("FTP_lz", "reading_exp_z [quart]")), colors = "viridis")
+int_age <- plot(ggpredict(region_ftp_r, terms = c("FTP_lz", "age_z [-1.4285578, -0.3035959, 1.6867213, 3.5905030]")), colors = "viridis") + scale_fill_viridis(name = "age", discrete = TRUE, labels = c("18", "31", "54", "76")) + scale_color_viridis(name = "age", discrete = TRUE, labels = c("18", "31", "54", "76"))
+
+ggsave("fig/Figure9_int_ftp_age.jpg", int_age, height = 7, width = 7, units = "in")
 """
 
 R"""
-plot(ggpredict(region_btp, terms = c("BTP_lz", "position")), facet = T, colors = "viridis")
+ftp_read <- plot(ggpredict(region_ftp_r, terms = c("FTP_lz", "reading_exp_z [quart]")), colors = "viridis")
+
+ggsave("fig/Figure10_int_ftp_read.jpg", ftp_read, height = 7, width = 7, units = "in")
 """
 
 R"""
-plot(ggpredict(region_btp, terms = c("BTP_lz", "age_z [quart]")), colors = "viridis")
+btp_position <- plot(ggpredict(region_btp_r, terms = c("BTP_lz", "position")), facet = T, colors = "viridis")
+
+ggsave("fig/Figure11_int_btp_pos.jpg", btp_position, height = 4, width = 7, units = "in")
 """
 
 R"""
-plot(ggpredict(region_btp, terms = c("BTP_lz", "reading_exp_z [quart]")), colors = "viridis")
+btp_age <- plot(ggpredict(region_btp_r, terms = c("BTP_lz", "age_z [-1.4285578, -0.3035959, 1.6867213, 3.5905030]")), colors = "viridis") + scale_fill_viridis(name = "age", discrete = TRUE, labels = c("18", "31", "54", "76")) + scale_color_viridis(name = "age", discrete = TRUE, labels = c("18", "31", "54", "76"))
+
+ggsave("fig/Figure12_int_btp_age.jpg", btp_age, height = 7, width = 7, units = "in")
+"""
+
+R"""
+btp_read <- plot(ggpredict(region_btp_r, terms = c("BTP_lz", "reading_exp_z [quart]")), colors = "viridis")
+
+ggsave("fig/Figure13_int_btp_read.jpg.jpg", btp_read, height = 7, width = 7, units = "in")
 """
 ```
 
 ## Model diagnostics
-```julia
+```julia results = "hidden"
 R"""
 library(performance)
-check_model(region_btp)
+check_model(region_btp_r)
 """
 
 R"""
-check_model(region_ftp)
+check_model(region_ftp_r)
 """
+```
+
+## Post-hoc LMM: Nationality 
+To assure that nationality is not a source of significant interparticipant difference, in particular that the FTP and BTP scores are are not processed in a significantly different way by US and British nationals, we conducted the following post-hoc LMM on 37 matched participants. 
+
+
+```julia
+formula_btp_nation = @formula (logRT  ~ 1 + BTP_lz * reading_exp_z * age_z * position + trial_number_z + word_number_z + length_z + prev_length_z + education + BTP_lz * origin +
+               (1 + trial_number_z + length_z + prev_length_z | id) + 
+               (1 + trial_number_z | w1) +
+               (1 + trial_number_z | w2));
+
+formula_ftp_nation = @formula (logRT  ~ 1 + FTP_lz * reading_exp_z * age_z * position  + trial_number_z + word_number_z + length_z + prev_length_z + education + FTP_lz * origin +
+               (1 + trial_number_z + length_z + prev_length_z | id) + 
+               (1 + trial_number_z | w1) +
+               (1 + trial_number_z | w2));
+
+ftp_nation = fit(MixedModel, formula_ftp_nation, spr_critregion, contrasts=cntrsts);
+btp_nation = fit(MixedModel, formula_btp_nation, spr_critregion, contrasts=cntrsts);
+
+show(ftp_nation)
+show(btp_nation)
+```
+
+## Post-hoc LMM: Freq v. word length
+
+```julia
+formula_btp_f = @formula (logRT  ~ 1 + BTP_lz * reading_exp_z * age_z * position + trial_number_z + word_number_z + freq_lz + prev_freq_lz + education + 
+               (1 + trial_number_z + freq_lz + prev_freq_lz | id) + 
+               (1 + trial_number_z | w1) +
+               (1 + trial_number_z | w2));
+
+formula_ftp_f = @formula (logRT  ~ 1 + FTP_lz * reading_exp_z * age_z * position + trial_number_z + word_number_z + freq_lz + prev_freq_lz + education + 
+               (1 + trial_number_z + freq_lz + prev_freq_lz | id) + 
+               (1 + trial_number_z | w1) +
+               (1 + trial_number_z | w2));
+
+ftp_freq = fit(MixedModel, formula_ftp_f, spr_critregion, contrasts=cntrsts);
+btp_freq = fit(MixedModel, formula_btp_f, spr_critregion, contrasts=cntrsts);
+
+show(ftp_freq)
+show(btp_freq)
+
+
+mods = [region_ftp, ftp_freq, region_btp, btp_freq];
+gof_summary = DataFrame(name = [:region_ftp, :ftp_freq, :region_btp, :btp_freq], dof=dof.(mods), deviance=deviance.(mods), AIC = aic.(mods), AICc = aicc.(mods), BIC = bic.(mods))
 ```
