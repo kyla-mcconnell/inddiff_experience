@@ -715,9 +715,9 @@ library(viridis)
 <ul>
 <li><p>length_z: length of current word &#40;z-scored&#41;</p>
 </li>
-<li><p>prev_length_z: length of previous word &#40;z-scored&#41;</p>
+<li><p><code>prev_length_z</code>: length of previous word &#40;z-scored&#41;</p>
 </li>
-<li><p>trial_number_z: trial number &#40;z-scored&#41;</p>
+<li><p><code>trial_number_z</code>: trial number &#40;z-scored&#41;</p>
 </li>
 <li><p>education: level of education &#40;4 levels from  high school to graduate degree&#41;</p>
 </li>
@@ -1043,10 +1043,10 @@ BTP_lz &amp; reading_exp_z &amp; age_z &amp; position: spillover_1   0.000874615
 
 <pre class='hljl'>
 <span class='hljl-n'>region_ftp_r</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>region_ftp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>);</span><span class='hljl-t'> </span><span class='hljl-cs'>#tuple that wraps the fitted model and the dataframe</span><span class='hljl-t'>
-</span><span class='hljl-nd'>@rput</span><span class='hljl-t'> </span><span class='hljl-n'>region_ftp</span><span class='hljl-p'>;</span><span class='hljl-t'>
+</span><span class='hljl-nd'>@rput</span><span class='hljl-t'> </span><span class='hljl-n'>region_ftp_r</span><span class='hljl-p'>;</span><span class='hljl-t'>
 
 </span><span class='hljl-n'>region_btp_r</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>region_btp</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>spr_critregion</span><span class='hljl-p'>);</span><span class='hljl-t'> </span><span class='hljl-cs'>#tuple that wraps the fitted model and the dataframe</span><span class='hljl-t'>
-</span><span class='hljl-nd'>@rput</span><span class='hljl-t'> </span><span class='hljl-n'>region_btp</span><span class='hljl-p'>;</span><span class='hljl-t'>
+</span><span class='hljl-nd'>@rput</span><span class='hljl-t'> </span><span class='hljl-n'>region_btp_r</span><span class='hljl-p'>;</span><span class='hljl-t'>
 
 </span><span class='hljl-so'>R&quot;summary(spr_critregion$age)&quot;</span><span class='hljl-t'>
 

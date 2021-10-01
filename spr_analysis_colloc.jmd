@@ -52,8 +52,8 @@ Predictors of interest:
 
 Other covariates:
 - length_z: length of current word (z-scored)
-- prev\_length\_z: length of previous word (z-scored)
-- trial\_number\_z: trial number (z-scored)
+- `prev_length_z`: length of previous word (z-scored)
+- `trial_number_z`: trial number (z-scored)
 - education: level of education (4 levels from  high school to graduate degree)
 
 
@@ -161,10 +161,10 @@ show(region_btp)
 ## Plot interactions using R
 ```julia results = "hidden"
 region_ftp_r = (region_ftp, spr_critregion); #tuple that wraps the fitted model and the dataframe
-@rput region_ftp;
+@rput region_ftp_r;
 
 region_btp_r = (region_btp, spr_critregion); #tuple that wraps the fitted model and the dataframe
-@rput region_btp;
+@rput region_btp_r;
 
 R"summary(spr_critregion$age)"
 
